@@ -1,0 +1,2139 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>One For All - Global Absenteeism Intelligence Center V9</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+body,html{font-family:'DM Sans',sans-serif;background:#0a0e1a;color:#e8eaf0}
+:root{--navy:#0a0e1a;--navy2:#121828;--navy3:#1a2235;--navy4:#222d42;--navy5:#2d3a52;--accent:#f97316;--accent2:#fb923c;--blue:#3b82f6;--teal:#14b8a6;--green:#22c55e;--red:#ef4444;--yellow:#eab308;--purple:#a855f7;--muted:#8892a4;--border:#2d3a52;--white:#e8eaf0}
+.shell{min-height:100vh;background:var(--navy);padding:0 0 40px}
+.topbar{background:var(--navy2);border-bottom:1px solid var(--border);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.topbar-left{display:flex;align-items:center;gap:16px}
+.logo-badge{background:var(--accent);color:#fff;font-size:10px;font-weight:600;padding:4px 10px;border-radius:4px;letter-spacing:.5px;text-transform:uppercase}
+.topbar-title{font-size:15px;font-weight:500;color:var(--white)}
+.topbar-sub{font-size:11px;color:var(--muted);margin-top:2px}
+.topbar-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.live-dot{width:7px;height:7px;border-radius:50%;background:var(--green);display:inline-block;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.live-label{font-size:11px;color:var(--green);display:flex;align-items:center;gap:5px}
+.filter-row{display:flex;align-items:center;gap:10px;padding:14px 24px;background:var(--navy2);border-bottom:1px solid var(--border);flex-wrap:wrap;position:sticky;top:57px;z-index:90}
+.filter-label{font-size:11px;color:var(--muted);font-weight:500;text-transform:uppercase;letter-spacing:.5px}
+select,input[type=text]{background:var(--navy3);border:1px solid var(--border);color:var(--white);font-family:'DM Sans',sans-serif;font-size:12px;padding:6px 10px;border-radius:6px;outline:none;cursor:pointer}
+select:hover,input[type=text]:hover{border-color:var(--accent)}
+.btn-filter{background:var(--accent);color:#fff;border:none;font-size:12px;font-weight:500;padding:6px 14px;border-radius:6px;cursor:pointer;font-family:'DM Sans',sans-serif}
+.btn-filter:hover{background:var(--accent2)}
+.btn-clear{background:var(--navy4);color:var(--muted);border:1px solid var(--border);font-size:12px;padding:6px 14px;border-radius:6px;cursor:pointer;font-family:'DM Sans',sans-serif}
+.btn-clear:hover{color:var(--white);border-color:var(--white)}
+.status-pill{font-size:11px;padding:4px 8px;border-radius:999px;background:var(--navy3);border:1px solid var(--border);color:var(--muted)}
+.status-pill.good{color:var(--green);border-color:rgba(34,197,94,.35);background:rgba(34,197,94,.08)}
+.status-pill.bad{color:var(--red);border-color:rgba(239,68,68,.35);background:rgba(239,68,68,.08)}
+.main{padding:20px 24px;display:flex;flex-direction:column;gap:20px}
+.kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px}
+.kpi-card{background:var(--navy2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;position:relative;overflow:hidden}
+.kpi-card::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;border-radius:10px 0 0 10px}
+.kpi-card.orange::before{background:var(--accent)}
+.kpi-card.blue::before{background:var(--blue)}
+.kpi-card.teal::before{background:var(--teal)}
+.kpi-card.green::before{background:var(--green)}
+.kpi-card.yellow::before{background:var(--yellow)}
+.kpi-card.purple::before{background:var(--purple)}
+.kpi-label{font-size:10px;color:var(--muted);font-weight:500;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.kpi-value{font-size:26px;font-weight:600;color:var(--white);font-family:'DM Mono',monospace;line-height:1}
+.kpi-sub{font-size:11px;color:var(--muted);margin-top:4px}
+.kpi-pct{font-size:12px;font-weight:500;padding:2px 6px;border-radius:4px;display:inline-block;margin-top:4px}
+.kpi-pct.good{background:rgba(34,197,94,.15);color:var(--green)}
+.kpi-pct.mid{background:rgba(234,179,8,.15);color:var(--yellow)}
+.kpi-pct.low{background:rgba(239,68,68,.15);color:var(--red)}
+.row2{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.row3{display:grid;grid-template-columns:1.4fr 1fr;gap:16px}
+.row4{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.panel{background:var(--navy2);border:1px solid var(--border);border-radius:10px;padding:18px}
+.panel-title{font-size:12px;font-weight:600;color:var(--white);text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.panel-title span.dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+.chart-wrap{position:relative;width:100%}
+.geo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:4px}
+.geo-btn{background:var(--navy3);border:1px solid var(--border);color:var(--muted);font-size:11px;font-weight:500;padding:8px 6px;border-radius:8px;cursor:pointer;text-align:center;transition:all .15s;font-family:'DM Sans',sans-serif}
+.geo-btn:hover,.geo-btn.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.funnel-item{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.funnel-bar-wrap{flex:1;background:var(--navy4);border-radius:4px;height:22px;overflow:hidden;position:relative}
+.funnel-bar{height:100%;border-radius:4px;display:flex;align-items:center;padding:0 8px;font-size:11px;font-weight:600;color:#fff;white-space:nowrap;transition:width .4s ease}
+.funnel-label{font-size:11px;color:var(--muted);width:80px;text-align:right;flex-shrink:0}
+.funnel-count{font-size:12px;font-weight:600;color:var(--white);width:60px;text-align:right;flex-shrink:0;font-family:'DM Mono',monospace}
+.reasons-table{width:100%;font-size:12px;border-collapse:collapse}
+.reasons-table th{color:var(--muted);font-weight:500;font-size:10px;text-transform:uppercase;letter-spacing:.4px;padding:6px 0;border-bottom:1px solid var(--border);text-align:left}
+.reasons-table th:last-child,.reasons-table td:last-child{text-align:right}
+.reasons-table td{padding:7px 0;border-bottom:1px solid rgba(45,58,82,.5);color:var(--white)}
+.reasons-table tr:hover td{background:rgba(45,58,82,.3)}
+.pct-bar{display:inline-block;height:6px;background:var(--accent);border-radius:3px;vertical-align:middle;margin-right:6px}
+.ticket-breakdown{display:flex;flex-direction:column;gap:10px}
+.tb-item{display:flex;align-items:center;gap:12px;background:var(--navy3);border-radius:8px;padding:10px 14px}
+.tb-num{font-size:22px;font-weight:600;color:var(--white);font-family:'DM Mono',monospace;min-width:60px}
+.tb-label{font-size:12px;color:var(--muted);line-height:1.4}
+.tb-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.renewal-funnel{display:flex;flex-direction:column;gap:8px}
+.rf-step{border-radius:8px;padding:10px 16px;display:flex;align-items:center;justify-content:space-between}
+.rf-step:nth-child(1){background:rgba(59,130,246,.15);border:1px solid rgba(59,130,246,.3)}
+.rf-step:nth-child(2){background:rgba(249,115,22,.15);border:1px solid rgba(249,115,22,.3)}
+.rf-step:nth-child(3){background:rgba(20,184,166,.15);border:1px solid rgba(20,184,166,.3)}
+.rf-label{font-size:12px;color:var(--muted)}
+.rf-val{font-size:20px;font-weight:600;font-family:'DM Mono',monospace}
+.rf-step:nth-child(1) .rf-val{color:var(--blue)}
+.rf-step:nth-child(2) .rf-val{color:var(--accent)}
+.rf-step:nth-child(3) .rf-val{color:var(--teal)}
+.rf-pct{font-size:11px;padding:2px 6px;border-radius:4px;background:rgba(255,255,255,.08);color:var(--muted)}
+.owner-table{width:100%;font-size:12px;border-collapse:collapse}
+.owner-table th{color:var(--muted);font-weight:500;font-size:10px;text-transform:uppercase;letter-spacing:.4px;padding:5px 8px;border-bottom:1px solid var(--border);text-align:left}
+.owner-table td{padding:6px 8px;border-bottom:1px solid rgba(45,58,82,.4);color:var(--white)}
+.owner-table tr:hover td{background:rgba(45,58,82,.3)}
+.owner-table td.center{text-align:center}
+.pct-pill{padding:2px 7px;border-radius:10px;font-size:10px;font-weight:500}
+.footer{padding:14px 24px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;font-size:11px;color:var(--muted)}
+.section-divider{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;padding:4px 0 0;border-top:1px solid var(--border)}
+.gauge-wrap{display:flex;flex-direction:column;align-items:center;padding:8px 0}
+.tag-list{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.tag{font-size:10px;padding:3px 8px;border-radius:12px;background:var(--navy4);color:var(--muted);border:1px solid var(--border)}
+/* ── Daily Productivity ── */
+.dp-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid rgba(45,58,82,.35)}
+.dp-row:last-child{border-bottom:none}
+.dp-name{font-size:12px;font-weight:500;color:var(--white);min-width:140px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dp-bar-track{flex:1;background:var(--navy4);border-radius:6px;height:18px;overflow:hidden;min-width:80px}
+.dp-bar-fill{height:100%;border-radius:6px;transition:width .5s cubic-bezier(.4,0,.2,1)}
+.dp-bar-fill.g{background:linear-gradient(90deg,#16a34a,#22c55e)}
+.dp-bar-fill.a{background:linear-gradient(90deg,#ca8a04,#eab308)}
+.dp-bar-fill.r{background:linear-gradient(90deg,#dc2626,#ef4444)}
+.dp-stat{font-size:11px;color:var(--muted);font-family:'DM Mono',monospace;white-space:nowrap;flex-shrink:0}
+.dp-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:8px;flex-shrink:0;white-space:nowrap}
+.dp-badge.g{background:rgba(34,197,94,.15);color:var(--green)}
+.dp-badge.a{background:rgba(234,179,8,.15);color:var(--yellow)}
+.dp-badge.r{background:rgba(239,68,68,.15);color:var(--red)}
+.rg-table{width:100%;border-collapse:collapse;font-size:11px;min-width:580px}
+.rg-table th{color:var(--muted);font-weight:500;font-size:10px;text-transform:uppercase;letter-spacing:.4px;padding:5px 10px;border-bottom:1px solid var(--border);text-align:center;white-space:nowrap}
+.rg-table th:first-child{text-align:left;min-width:140px}
+.rg-table td{padding:6px 8px;border-bottom:1px solid rgba(45,58,82,.3);text-align:center}
+.rg-table td:first-child{text-align:left;color:var(--white);font-weight:500}
+.rg-table tr:hover td{background:rgba(45,58,82,.2)}
+.rg-cell{display:inline-block;padding:2px 8px;border-radius:6px;font-weight:700;font-family:'DM Mono',monospace;font-size:10px;min-width:36px;text-align:center}
+.rg-cell.g{background:rgba(34,197,94,.15);color:var(--green)}
+.rg-cell.a{background:rgba(234,179,8,.15);color:var(--yellow)}
+.rg-cell.r{background:rgba(239,68,68,.15);color:var(--red)}
+.rg-cell.empty{color:rgba(136,146,164,.3)}
+/* ── Custom Multi-Select ── */
+.ms-wrap{position:relative;display:inline-block}
+.ms-btn{background:var(--navy3);border:1px solid var(--border);color:var(--white);font-family:'DM Sans',sans-serif;font-size:12px;padding:6px 26px 6px 10px;border-radius:6px;cursor:pointer;white-space:nowrap;text-align:left;position:relative;min-width:110px}
+.ms-btn::after{content:'▾';position:absolute;right:8px;top:50%;transform:translateY(-50%);font-size:9px;color:var(--muted);pointer-events:none}
+.ms-btn:hover{border-color:var(--accent)}
+.ms-wrap.open>.ms-btn{border-color:var(--accent);background:var(--navy4)}
+.ms-dropdown{position:absolute;top:calc(100% + 4px);left:0;background:var(--navy3);border:1px solid var(--border);border-radius:8px;z-index:999;min-width:190px;padding:4px 0;display:none;max-height:230px;overflow-y:auto;box-shadow:0 8px 24px rgba(0,0,0,.55)}
+.ms-wrap.open>.ms-dropdown{display:block}
+.ms-item{display:flex;align-items:center;gap:8px;padding:7px 12px;cursor:pointer;font-size:12px;color:var(--white);user-select:none}
+.ms-item:hover{background:var(--navy4)}
+.ms-item input[type=checkbox]{cursor:pointer;accent-color:var(--accent);width:13px;height:13px;flex-shrink:0}
+.ms-divider{height:1px;background:var(--border);margin:3px 0}
+/* ── Date Range ── */
+.date-range-group{display:flex;align-items:center;gap:6px;background:var(--navy3);border:1px solid var(--border);border-radius:6px;padding:4px 10px}
+.date-range-group.active{border-color:var(--accent)}
+.date-lbl{font-size:10px;color:var(--muted);font-weight:500;text-transform:uppercase;letter-spacing:.4px;flex-shrink:0}
+.date-sep-txt{font-size:11px;color:var(--muted)}
+input[type=date]{background:transparent;border:none;color:var(--white);font-family:'DM Sans',sans-serif;font-size:12px;padding:2px 0;outline:none;cursor:pointer;color-scheme:dark;min-width:110px}
+input[type=date]::-webkit-calendar-picker-indicator{filter:invert(0.55) sepia(1) saturate(3) hue-rotate(10deg);cursor:pointer}
+.filter-vsep{width:1px;height:22px;background:var(--border);flex-shrink:0}
+/* ── Insight Hub ── */
+.outcome-kpi{background:var(--navy3);border:1px solid var(--border);border-radius:8px;padding:12px 16px}
+.insight-header{font-size:13px;font-weight:600;color:var(--white);text-transform:uppercase;letter-spacing:.6px;padding:6px 0 2px;border-top:2px solid var(--border);display:flex;align-items:center;gap:10px}
+.insight-sub{font-size:10px;font-weight:400;text-transform:none;letter-spacing:0;color:var(--muted)}
+.mini-kpi{background:var(--navy3);border-radius:8px;padding:10px 14px;border:1px solid var(--border);min-width:100px}
+.mini-kpi .kpi-label{font-size:9px}
+.mini-kpi .kpi-value{font-size:18px}
+.res-eff-bar{display:inline-block;height:6px;border-radius:3px;vertical-align:middle;margin-right:6px}
+.pct-pill.good{background:rgba(34,197,94,.15);color:var(--green)}
+.pct-pill.mid{background:rgba(234,179,8,.15);color:var(--yellow)}
+.pct-pill.low{background:rgba(239,68,68,.15);color:var(--red)}
+.attn-badge{font-size:9px;padding:1px 6px;border-radius:8px;display:inline-block;font-weight:600}
+.attn-loading{color:var(--muted);font-size:12px;padding:24px;text-align:center}
+/* ── Attendance Intelligence ── */
+.att-summary-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
+.att-summary-card{background:var(--navy2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;border-left:3px solid var(--teal)}
+.att-intel-section{display:flex;flex-direction:column;gap:16px}
+/* ── Drill-down Modal ── */
+.drill-modal-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(10,14,26,.85);z-index:9999;align-items:center;justify-content:center}
+.drill-modal-overlay.open{display:flex}
+.drill-modal-box{background:var(--navy2);border:1px solid var(--border);border-radius:12px;padding:24px;max-width:580px;width:92%;max-height:82vh;overflow-y:auto;position:relative}
+.drill-section-title{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin:14px 0 6px;padding-bottom:4px;border-bottom:1px solid var(--border)}
+.drill-chips{display:flex;flex-wrap:wrap;gap:6px}
+.drill-chip{font-size:11px;padding:3px 9px;border-radius:10px;background:var(--navy4);color:var(--white);border:1px solid var(--border)}
+.rep-count{font-size:9px;color:var(--muted);display:block;margin-top:2px}
+</style>
+</head>
+<body>
+<div class="shell">
+<div class="topbar">
+  <div class="topbar-left">
+    <span class="logo-badge">Absenteeism</span>
+    <div>
+      <div class="topbar-title">Team Performance Dashboard</div>
+      <div class="topbar-sub">One for All · All Regions · Powered by Salesforce</div>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <span class="live-label"><span class="live-dot"></span> Live · Auto-refresh 4hrs</span>
+    <button class="btn-clear" onclick="loadSheetData(true)">Refresh</button>
+    <button class="btn-clear" onclick="exportCSV()">Export CSV</button>
+    <span class="status-pill" id="load-status">Loading...</span>
+    <span style="font-size:11px;color:var(--muted)" id="last-updated"></span>
+  </div>
+</div>
+
+<div class="filter-row">
+    <select id="f-report-mode" onchange="applyFilters()" style="min-width:130px;font-weight:600">
+    <option value="all">All Tickets</option>
+    <option value="renewal">Renewal Only</option>
+  </select>
+  <div class="ms-wrap" id="ms-year">
+    <button class="ms-btn" type="button" onclick="toggleMs(event,'ms-year')" data-ph="All Years" style="min-width:110px">All Years</button>
+    <div class="ms-dropdown" id="ms-year-drop"></div>
+  </div>
+  <div class="ms-wrap" id="ms-month">
+    <button class="ms-btn" type="button" onclick="toggleMs(event,'ms-month')" data-ph="All Months" style="min-width:140px">All Months</button>
+    <div class="ms-dropdown" id="ms-month-drop"></div>
+  </div>
+  <div class="ms-wrap" id="ms-week">
+    <button class="ms-btn" type="button" onclick="toggleMs(event,'ms-week')" data-ph="All Weeks" style="min-width:120px">All Weeks</button>
+    <div class="ms-dropdown" id="ms-week-drop"></div>
+  </div>
+  <select id="f-geo" style="min-width:110px" onchange="syncGeoButtons(this.value);applyFilters()">
+    <option value="all">All Regions</option>
+    <option value="IN">IN</option>
+    <option value="ROW">ROW</option>
+    <option value="INROW">IN / ROW</option>
+    <option value="CAUS">CA / US</option>
+  </select>
+  <div class="ms-wrap" id="ms-product">
+    <button class="ms-btn" type="button" onclick="toggleMs(event,'ms-product')" data-ph="All Products" style="min-width:130px">All Products</button>
+    <div class="ms-dropdown" id="ms-product-drop"></div>
+  </div>
+  <div class="ms-wrap" id="ms-owner">
+    <button class="ms-btn" type="button" onclick="toggleMs(event,'ms-owner')" data-ph="All Associates" style="min-width:145px">All Associates</button>
+    <div class="ms-dropdown" id="ms-owner-drop"></div>
+  </div>
+  <div class="filter-vsep"></div>
+  <div class="date-range-group" id="date-range-group">
+    <span class="date-lbl">From</span>
+    <input type="date" id="f-from" onchange="onDateChange()">
+    <span class="date-sep-txt">→</span>
+    <span class="date-lbl">To</span>
+    <input type="date" id="f-to" onchange="onDateChange()">
+  </div>
+  <button class="btn-filter" onclick="applyFilters()">Apply</button>
+  <button class="btn-clear" onclick="clearFilters()">Reset</button>
+  <span id="row-count" style="font-size:11px;color:var(--muted);margin-left:4px"></span>
+</div>
+
+<div class="main">
+
+<div class="kpi-row" id="kpi-row">
+  <div class="kpi-card orange"><div class="kpi-label">Tickets Created</div><div class="kpi-value" id="k-total">—</div><div class="kpi-sub">Total cases opened</div></div>
+  <div class="kpi-card blue"><div class="kpi-label">Total Dialed</div><div class="kpi-value" id="k-dialed">—</div><div class="kpi-sub">Col J not blank</div><div id="k-dial-pct" class="kpi-pct mid"></div></div>
+  <div class="kpi-card teal"><div class="kpi-label">Connected</div><div class="kpi-value" id="k-conn">—</div><div class="kpi-sub">Excl. RNR / Refund</div><div id="k-conn-pct" class="kpi-pct mid"></div></div>
+  <div class="kpi-card green"><div class="kpi-label">Unique CX Connected</div><div class="kpi-value" id="k-unique">—</div><div class="kpi-sub">Unique Student IDs</div></div>
+  <div class="kpi-card teal"><div class="kpi-label">Absences Last 60 Days</div><div class="kpi-value" id="k-abs60">—</div><div class="kpi-sub">M column count</div></div>
+  <div class="kpi-card yellow"><div class="kpi-label">Missed First Class</div><div class="kpi-value" id="k-missed-first">—</div><div class="kpi-sub">Col Q = missed_first_session</div></div>
+  <div class="kpi-card green"><div class="kpi-label">Active Associates</div><div class="kpi-value" id="k-associates">—</div><div class="kpi-sub">Excl. system queue</div></div>
+  <div class="kpi-card blue"><div class="kpi-label">Daily Target</div><div class="kpi-value" id="k-target">—</div><div class="kpi-sub">Associates × 70 dials</div></div>
+  <div class="kpi-card orange"><div class="kpi-label">Achievement %</div><div class="kpi-value" id="k-achievement">—</div><div class="kpi-sub">Dialed ÷ Daily Target</div><div id="k-achv-pill" class="kpi-pct mid"></div></div>
+  <div class="kpi-card green"><div class="kpi-label">Reactivation Rate</div><div class="kpi-value" id="k-reactivation">—</div><div class="kpi-sub">Attended 1st class post-call</div><div id="k-react-pill" class="kpi-pct mid"></div></div>
+</div>
+
+<!-- Outcome & Reactivation Analysis -->
+<div class="panel">
+  <div class="panel-title">
+    <span class="dot" style="background:var(--green)"></span>Outcome &amp; Reactivation Analysis
+    <span style="font-size:10px;color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0;margin-left:4px">connected calls only · first valid class after call · per-ticket</span>
+    <span id="attn-status" style="margin-left:auto;font-size:10px;color:var(--muted)"></span>
+    <button onclick="exportOutcomeEvaluation()" style="margin-left:10px;padding:3px 10px;font-size:10px;background:rgba(20,184,166,.15);color:var(--teal);border:1px solid rgba(20,184,166,.35);border-radius:4px;cursor:pointer" title="Export every connected ticket with its evaluation result and exclusion reason">⬇ Export Eval</button>
+  </div>
+  <div id="outcome-content">
+    <div class="attn-loading">⏳ Loading attendance data from Quick Sight Dashboard...</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- ATTENDANCE INTELLIGENCE                                         -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<div id="att-intel-section" class="att-intel-section" style="display:none">
+
+  <div class="insight-header" style="border-top:none;padding-top:0">
+    🎓 Attendance Intelligence
+    <span class="insight-sub">Region · Grade · Time · Product · Reactivation · Repeat — respects all active filters</span>
+  </div>
+
+  <!-- 4 Executive Summary Cards -->
+  <div class="att-summary-row">
+    <div class="att-summary-card">
+      <div class="kpi-label">Most Affected Grade</div>
+      <div class="kpi-value" id="att-card-grade">—</div>
+      <div class="kpi-sub" id="att-card-grade-sub"></div>
+    </div>
+    <div class="att-summary-card">
+      <div class="kpi-label">Peak Missed Class Time</div>
+      <div class="kpi-value" id="att-card-time" style="font-size:17px">—</div>
+      <div class="kpi-sub" id="att-card-time-sub"></div>
+    </div>
+    <div class="att-summary-card">
+      <div class="kpi-label">Highest Absenteeism Region</div>
+      <div class="kpi-value" id="att-card-country">—</div>
+      <div class="kpi-sub" id="att-card-country-sub"></div>
+    </div>
+    <div class="att-summary-card">
+      <div class="kpi-label">Highest Repeat Region</div>
+      <div class="kpi-value" id="att-card-region">—</div>
+      <div class="kpi-sub" id="att-card-region-sub"></div>
+    </div>
+  </div>
+
+  <!-- Regional Intelligence Table -->
+  <div class="panel">
+    <div class="panel-title" style="justify-content:space-between">
+      <span style="display:flex;align-items:center;gap:8px">
+        <span class="dot" style="background:var(--blue)"></span>Regional Intelligence
+        <span style="font-size:10px;color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0">region · missed · reactivation · repeat · click row for detail</span>
+      </span>
+      <span style="display:flex;align-items:center;gap:8px;flex-shrink:0">
+        <label style="font-size:10px;color:var(--muted)">Region:</label>
+        <select id="att-region-filter" style="font-size:10px;padding:2px 6px;background:var(--navy4);color:var(--white);border:1px solid var(--border);border-radius:5px" onchange="if(lastAttIntelData)renderAttIntelTableFn(lastAttIntelData.byRegion)">
+          <option value="all">All</option>
+          <option value="IND">IND</option>
+          <option value="ME">ME</option>
+          <option value="USA">USA</option>
+          <option value="SEA">SEA</option>
+          <option value="ANZ">ANZ</option>
+          <option value="UK">UK</option>
+          <option value="Others">Others</option>
+        </select>
+        <button class="btn-clear" onclick="exportAttIntelTable()" style="font-size:10px;padding:3px 8px;margin:0">⬇ Export</button>
+      </span>
+    </div>
+    <div style="overflow-x:auto">
+      <table class="owner-table">
+        <thead><tr>
+          <th>Region</th>
+          <th style="text-align:center">Total Missed</th>
+          <th style="text-align:center">Reactivation %</th>
+          <th style="text-align:center">Repeat %</th>
+          <th>Top Grade</th>
+          <th style="text-align:center">Peak Batch Time</th>
+          <th>Top Reason</th>
+          <th>Top Resolution</th>
+        </tr></thead>
+        <tbody id="att-intel-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Grade Intelligence + Time Intelligence -->
+  <div class="row4">
+    <div class="panel">
+      <div class="panel-title" style="justify-content:space-between">
+        <span style="display:flex;align-items:center;gap:8px"><span class="dot" style="background:var(--purple)"></span>Grade Intelligence <span style="font-size:10px;color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0">click row for detail</span></span>
+        <button class="btn-clear" onclick="exportGradeIntelTable()" style="font-size:10px;padding:3px 8px;margin:0;flex-shrink:0">⬇ Export</button>
+      </div>
+      <div style="overflow-x:auto;max-height:320px;overflow-y:auto">
+        <table class="owner-table">
+          <thead><tr>
+            <th>Grade</th><th style="text-align:center">Tickets</th>
+            <th style="text-align:center">% of Total</th>
+            <th style="text-align:center">Reactivation %</th>
+            <th style="text-align:center">Repeat %</th>
+            <th>Top Reason</th>
+            <th style="text-align:center">Peak Time</th>
+          </tr></thead>
+          <tbody id="grade-intel-body"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-title" style="justify-content:space-between">
+        <span style="display:flex;align-items:center;gap:8px"><span class="dot" style="background:var(--teal)"></span>Time Intelligence <span style="font-size:10px;color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0">by batch session start hour (IST) · filtered tickets only</span></span>
+        <button class="btn-clear" onclick="exportTimeIntelTable()" style="font-size:10px;padding:3px 8px;margin:0;flex-shrink:0">⬇ Export</button>
+      </div>
+      <div style="overflow-x:auto;max-height:320px;overflow-y:auto">
+        <table class="owner-table">
+          <thead><tr>
+            <th>Time Slot (IST)</th>
+            <th style="text-align:center">Missed Classes</th>
+            <th style="text-align:center">Reactivation %</th>
+            <th style="text-align:center">Repeat %</th>
+          </tr></thead>
+          <tbody id="time-intel-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Regional Time Intelligence + Product Intelligence -->
+  <div class="row4">
+    <div class="panel">
+      <div class="panel-title" style="justify-content:space-between">
+        <span style="display:flex;align-items:center;gap:8px"><span class="dot" style="background:var(--yellow)"></span>Regional Time Intelligence</span>
+        <button class="btn-clear" onclick="exportCountryTimeIntelTable()" style="font-size:10px;padding:3px 8px;margin:0;flex-shrink:0">⬇ Export</button>
+      </div>
+      <div style="overflow-x:auto;max-height:280px;overflow-y:auto">
+        <table class="owner-table">
+          <thead><tr>
+            <th>Region</th><th style="text-align:center">Peak Time</th>
+            <th style="text-align:center">Missed Sessions</th>
+            <th style="text-align:center">Reactivation %</th>
+          </tr></thead>
+          <tbody id="country-time-intel-body"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-title" style="justify-content:space-between">
+        <span style="display:flex;align-items:center;gap:8px"><span class="dot" style="background:var(--accent)"></span>Product Intelligence <span style="font-size:10px;color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0">click row for detail</span></span>
+        <button class="btn-clear" onclick="exportProductIntelTable()" style="font-size:10px;padding:3px 8px;margin:0;flex-shrink:0">⬇ Export</button>
+      </div>
+      <div style="overflow-x:auto;max-height:280px;overflow-y:auto">
+        <table class="owner-table">
+          <thead><tr>
+            <th>Product</th><th style="text-align:center">Tickets</th>
+            <th style="text-align:center">Reactivation %</th>
+            <th style="text-align:center">Repeat %</th>
+            <th>Top Grade</th><th style="text-align:center">Peak Time</th>
+          </tr></thead>
+          <tbody id="product-intel-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end #att-intel-section -->
+
+<!-- Drill-down Modal -->
+<div class="drill-modal-overlay" id="drill-modal-overlay" onclick="if(event.target===this)closeDrillModal()">
+  <div class="drill-modal-box">
+    <button onclick="closeDrillModal()" style="position:absolute;top:12px;right:14px;background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;line-height:1">✕</button>
+    <div id="drill-modal-content"></div>
+  </div>
+</div>
+
+<div class="row2">
+  <div class="panel">
+    <div class="panel-title"><span class="dot" style="background:var(--accent)"></span>Geo Region Selector</div>
+    <div class="geo-grid" id="geo-btns">
+      <button class="geo-btn active" data-geo="all" onclick="geoClick(this,'all')">🌍 All Regions</button>
+      <button class="geo-btn" data-geo="IN" onclick="geoClick(this,'IN')">🇮🇳 IN</button>
+      <button class="geo-btn" data-geo="ROW" onclick="geoClick(this,'ROW')">🌎 ROW</button>
+      <button class="geo-btn" data-geo="INROW" onclick="geoClick(this,'INROW')">🌏 IN / ROW</button>
+      <button class="geo-btn" data-geo="CAUS" onclick="geoClick(this,'CAUS')">🇺🇸 CA / US</button>
+    </div>
+    <div style="margin-top:14px">
+      <div class="panel-title" style="margin-bottom:8px"><span class="dot" style="background:var(--blue)"></span>Renewal Funnel</div>
+      <div class="renewal-funnel">
+        <div class="rf-step"><div><div class="rf-label">Tickets Created (L=1)</div></div><div style="text-align:right"><div class="rf-val" id="rf1">—</div></div></div>
+        <div class="rf-step"><div><div class="rf-label">Dialed (J not blank)</div></div><div style="text-align:right"><div class="rf-val" id="rf2">—</div><div class="rf-pct" id="rf2p"></div></div></div>
+        <div class="rf-step"><div><div class="rf-label">Connected</div></div><div style="text-align:right"><div class="rf-val" id="rf3">—</div><div class="rf-pct" id="rf3p"></div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title" style="justify-content:space-between">
+      <span style="display:flex;align-items:center;gap:8px"><span class="dot" style="background:var(--teal)"></span>Ticket Breakdown</span>
+      <button class="btn-clear" onclick="exportTicketBreakdown()" style="font-size:10px;padding:3px 8px;margin:0;flex-shrink:0">⬇ Export</button>
+    </div>
+    <div class="ticket-breakdown" id="ticket-breakdown"></div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title"><span class="dot" style="background:var(--yellow)"></span>Connect% Gauge</div>
+    <div class="gauge-wrap">
+      <canvas id="gaugeChart" width="220" height="130"></canvas>
+      <div style="font-size:28px;font-weight:600;color:var(--white);font-family:'DM Mono',monospace;margin-top:-20px" id="gauge-val">—</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px">Connect %</div>
+    </div>
+    <div style="margin-top:12px">
+      <div class="panel-title" style="margin-bottom:8px"><span class="dot" style="background:var(--purple)"></span>Dial % vs Connect %</div>
+      <div class="chart-wrap" style="height:110px">
+        <canvas id="dialConnBar"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row3">
+  <div class="panel">
+    <div class="panel-title"><span class="dot" style="background:var(--accent)"></span>Top Reasons for Absence</div>
+    <table class="reasons-table" id="reasons-table">
+      <thead><tr><th>Reason for Missed Classes</th><th>Count</th><th>% of Connected</th></tr></thead>
+      <tbody id="reasons-body"></tbody>
+    </table>
+  </div>
+  <div class="panel">
+    <div class="panel-title" style="justify-content:space-between">
+      <span style="display:flex;align-items:center;gap:8px"><span class="dot" style="background:var(--blue)"></span>Absenteeism Resolution Provided (Connected Call)</span>
+      <button class="btn-clear" onclick="exportResolution()" style="font-size:10px;padding:3px 8px;margin:0;flex-shrink:0">⬇ Export</button>
+    </div>
+    <table class="reasons-table"><thead><tr><th>Resolution</th><th>Count</th></tr></thead><tbody id="resolution-body"></tbody></table>
+  </div>
+</div>
+
+<div class="row4">
+  <div class="panel">
+    <div class="panel-title"><span class="dot" style="background:var(--teal)"></span>Monthly Trend — Tickets / Dialed / Connected</div>
+    <div class="chart-wrap" style="height:220px">
+      <canvas id="trendLine"></canvas>
+    </div>
+  </div>
+  <div class="panel">
+    <div class="panel-title"><span class="dot" style="background:var(--green)"></span>Performance by Product</div>
+    <div class="chart-wrap" style="height:220px">
+      <canvas id="productBar"></canvas>
+    </div>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="panel-title"><span class="dot" style="background:var(--purple)"></span>Associate Performance Breakdown</div>
+  <div style="overflow-x:auto">
+    <table class="owner-table" id="owner-table">
+      <thead><tr>
+        <th>Associate</th><th>Tickets</th><th>Dialed</th><th>Dial %</th>
+        <th>Connected</th><th>Connect %</th><th>Unique CX</th>
+        <th>Renewal Created</th><th>Renewal Connected</th><th>Target</th><th>Achievement %</th>
+      </tr></thead>
+      <tbody id="owner-body"></tbody>
+    </table>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="panel-title"><span class="dot" style="background:var(--yellow)"></span>Dialing Funnel by Geo</div>
+  <div id="funnel-geo" style="margin-top:4px"></div>
+</div>
+
+<!-- Daily Productivity Panel -->
+<div class="panel" id="daily-panel">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px">
+    <div class="panel-title" style="margin-bottom:0">
+      <span class="dot" style="background:var(--accent)"></span>Daily Scorecard
+      <span id="dp-date-label" style="font-size:11px;color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0;margin-left:6px"></span>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <span style="font-size:11px;color:var(--muted)">Select date:</span>
+      <input type="date" id="dp-date" onchange="refreshDailyView()"
+        style="background:var(--navy4);border:1px solid var(--border);color:var(--white);font-family:'DM Sans',sans-serif;font-size:12px;padding:5px 9px;border-radius:6px;outline:none;cursor:pointer;color-scheme:dark">
+    </div>
+  </div>
+  <div id="daily-scorecard" style="min-height:48px;margin-bottom:24px"></div>
+  <div class="panel-title" style="margin-bottom:10px">
+    <span class="dot" style="background:var(--teal)"></span>7-Day Rolling Performance
+    <span style="font-size:10px;color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0;margin-left:6px">dials vs 70-dial target · hover for detail</span>
+  </div>
+  <div id="rolling-7" style="overflow-x:auto"></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- INSIGHTS HUB -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<div class="insight-header">
+  ⚡ Insights Hub
+  <span class="insight-sub">Outcome Analysis · Regional Intelligence · Repeat Absentees · Daily Pipeline</span>
+</div>
+
+<!-- Row: Daily Pipeline | Repeat Absentees -->
+<div class="row4">
+
+  <!-- Daily Ticket Pipeline -->
+  <div class="panel">
+    <div class="panel-title">
+      <span class="dot" style="background:var(--accent)"></span>Daily Ticket Pipeline
+      <span style="font-size:10px;color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0;margin-left:4px">Col O · First Welcome / Absenteeism Date</span>
+    </div>
+    <div style="display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap">
+      <div class="mini-kpi"><div class="kpi-label">Total Assigned</div><div class="kpi-value" id="pipe-total" style="font-size:20px">—</div></div>
+      <div class="mini-kpi"><div class="kpi-label">Daily Average</div><div class="kpi-value" id="pipe-avg" style="font-size:20px">—</div></div>
+      <div class="mini-kpi"><div class="kpi-label">Peak Day</div><div class="kpi-value" id="pipe-max" style="font-size:20px;color:var(--accent)">—</div></div>
+      <div class="mini-kpi"><div class="kpi-label">Active Days</div><div class="kpi-value" id="pipe-days" style="font-size:20px">—</div></div>
+    </div>
+    <div class="chart-wrap" style="height:180px">
+      <canvas id="pipelineBar"></canvas>
+    </div>
+  </div>
+
+  <!-- Repeat Absentees -->
+  <div class="panel">
+    <div class="panel-title">
+      <span class="dot" style="background:var(--red)"></span>Repeat Absentees
+      <span style="font-size:10px;color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0;margin-left:4px">students with 2+ tickets in current view</span>
+    </div>
+    <div style="display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap">
+      <div class="mini-kpi"><div class="kpi-label">2+ Tickets</div><div class="kpi-value" id="repeat-2plus" style="font-size:20px">—</div></div>
+      <div class="mini-kpi"><div class="kpi-label">3+ Tickets</div><div class="kpi-value" id="repeat-3plus" style="font-size:20px;color:var(--yellow)">—</div></div>
+      <div class="mini-kpi"><div class="kpi-label">4+ High Risk</div><div class="kpi-value" id="repeat-4plus" style="font-size:20px;color:var(--red)">—</div></div>
+    </div>
+    <div style="overflow-x:auto;max-height:240px;overflow-y:auto">
+      <table class="owner-table">
+        <thead><tr>
+          <th>Student ID</th>
+          <th style="text-align:center">Tickets</th>
+          <th>Top Reason</th>
+          <th>Product(s)</th>
+          <th style="text-align:center">Risk</th>
+        </tr></thead>
+        <tbody id="repeat-body"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+</div><!-- end .main -->
+
+<div class="footer">
+  <span>Absenteeism Team · One for All Dashboard · V9 · Auto-derived from Salesforce + Drive Attendance API</span>
+  <span id="footer-date"></span>
+</div>
+</div><!-- end .shell -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+// ─── Config ───────────────────────────────────────────────────────────────────
+const SHEET_ID='1kkiYBWP9FNcP0LS3A8TaZ48E7Lr3Q5Tw0KUeps5rD1w';
+const ATTENDANCE_API_URL='https://script.google.com/macros/s/AKfycbwQOSGKrXL1L0wscC1K_2TYy8ZzmOfRyB0LQ4sgcEj0Ravj0zPWXxX3oPLkDFcn2Z8UWw/exec';
+// (Old GViz GID kept for reference but no longer used for attendance)
+// const ATTENDANCE_GID='730995553';
+const SHEET_NAMES=['One for All - Absenteesim','One for All - Absenteeism','Sheet1'];
+const AUTO_REFRESH_MS=4*60*60*1000;
+const RNR_VAL='rnr';
+const REFUND_VAL='refund related issues';
+const TRAINER_VAL='trainer side cancellation';
+const NO_REASON_VAL='no reason stated';
+
+let allData=[];
+let currentFilteredData=[];
+let sheetCache=null;
+let attendanceData=[];
+let attendanceMap={};
+let attendanceLoaded=false;
+let lastOutcomeResults=[]; // per-ticket evaluation log for export/debug
+let lastAttIntelData=null; // cached attendance intelligence aggregation
+let gaugeChart=null,dialConnBarChart=null,trendLineChart=null,productBarChart=null,pipelineBarChart=null;
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+function getGeo(country){
+  if(!country)return'ROW';
+  const c=country.trim().toUpperCase();
+  if(c==='IN')return'IN';
+  if(c==='CA'||c==='US')return'CA/US';
+  return'ROW';
+}
+function cleanText(v){return v===null||v===undefined?'':String(v).trim();}
+function reasonKey(j){return cleanText(j).toLowerCase();}
+function isDialed(j){return cleanText(j)!=='';}
+function isConnectedExact(j){
+  if(!isDialed(j))return false;
+  const v=reasonKey(j);
+  return v!==RNR_VAL&&v!==REFUND_VAL;
+}
+function isMissedFirstSession(secondaryReason){
+  return cleanText(secondaryReason).toLowerCase()==='missed_first_session';
+}
+function getTicketBreakdownType(j){
+  if(!isDialed(j))return'blank';
+  const v=reasonKey(j);
+  if(v===RNR_VAL)return'rnr';
+  if(v===REFUND_VAL)return'refund';
+  if(v===TRAINER_VAL)return'trainer';
+  if(v===NO_REASON_VAL||v==='no reason stated / forgot to attend')return'noreason';
+  if(isConnectedExact(j))return'connected';
+  return'other';
+}
+function parseDate(s){
+  const raw=cleanText(s);
+  if(!raw)return null;
+  const m=raw.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+  if(!m)return null;
+  const day=parseInt(m[1],10),month=parseInt(m[2],10),year=parseInt(m[3],10);
+  const d=new Date(year,month-1,day);
+  if(d.getFullYear()!==year||d.getMonth()!==month-1||d.getDate()!==day)return null;
+  return d;
+}
+function parseDateTime(s){
+  const raw=cleanText(s);
+  if(!raw)return null;
+  const m=raw.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})[,\s]+(\d{1,2}):(\d{2})(?::(\d{2}))?/);
+  if(!m)return null;
+  const day=parseInt(m[1],10),month=parseInt(m[2],10),year=parseInt(m[3],10);
+  const hour=parseInt(m[4],10),minute=parseInt(m[5],10),second=m[6]?parseInt(m[6],10):0;
+  return new Date(year,month-1,day,hour,minute,second);
+}
+function parseAttendanceDate(s){
+  const raw=cleanText(s);
+  if(!raw)return null;
+  // GViz Date() format
+  const gm=raw.match(/^Date\((\d+),(\d+),(\d+)/);
+  if(gm)return new Date(parseInt(gm[1]),parseInt(gm[2]),parseInt(gm[3]));
+  // dd/mm/yyyy HH:MM:SS (with time)
+  const dtm=raw.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})[,\s]+(\d{1,2}):(\d{2})(?::(\d{2}))?/);
+  if(dtm)return new Date(parseInt(dtm[3]),parseInt(dtm[2])-1,parseInt(dtm[1]),parseInt(dtm[4]),parseInt(dtm[5]),dtm[6]?parseInt(dtm[6]):0);
+  // dd/mm/yyyy (date only)
+  const dm=raw.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+  if(dm)return new Date(parseInt(dm[3]),parseInt(dm[2])-1,parseInt(dm[1]));
+  // yyyy-mm-dd HH:MM:SS (with time) — e.g. "2026-06-02 14:30:00"
+  const itm=raw.match(/^(\d{4})-(\d{1,2})-(\d{1,2})[T\s](\d{1,2}):(\d{2})(?::(\d{2}))?/);
+  if(itm)return new Date(parseInt(itm[1]),parseInt(itm[2])-1,parseInt(itm[3]),parseInt(itm[4]),parseInt(itm[5]),itm[6]?parseInt(itm[6]):0);
+  // yyyy-mm-dd (date only)
+  const im=raw.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+  if(im)return new Date(parseInt(im[1]),parseInt(im[2])-1,parseInt(im[3]));
+  return null;
+}
+function isPresent(v){
+  const s=cleanText(v).toLowerCase();
+  return s==='1'||s==='true'||s==='1.0';
+}
+function computeBusinessDate(dateTimeStr,country){
+  const dt=parseDateTime(dateTimeStr);
+  if(!dt)return null;
+  const geo=getGeo(country);
+  const t=dt.getHours()*3600+dt.getMinutes()*60+dt.getSeconds();
+  if(geo==='CA/US'){
+    if(t>=21*3600)return new Date(dt.getFullYear(),dt.getMonth(),dt.getDate());
+    if(t<=(6*3600+59*60+59))return new Date(dt.getFullYear(),dt.getMonth(),dt.getDate()-1);
+    return null;
+  }else{
+    if(t>=9*3600&&t<=(22*3600+59*60+59))return new Date(dt.getFullYear(),dt.getMonth(),dt.getDate());
+    return null;
+  }
+}
+function getBusinessDate(record){return computeBusinessDate(record.dateOpened,record.country);}
+function getActivityDate(record){
+  const dt=record.lastModified&&record.lastModified.trim()?record.lastModified:record.dateOpened;
+  return computeBusinessDate(dt,record.country);
+}
+function parseDateInput(val){
+  if(!val)return null;
+  const[y,m,d]=val.split('-').map(Number);
+  if(!y||!m||!d)return null;
+  return new Date(y,m-1,d);
+}
+function dateToInt(d){return d.getFullYear()*10000+(d.getMonth()+1)*100+d.getDate();}
+function getMonthKey(d){if(!d)return null;return`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;}
+function getWeekBucket(d){
+  if(!d)return null;
+  const day=d.getDate();
+  if(day<=7)return'1';if(day<=14)return'2';if(day<=21)return'3';if(day<=28)return'4';return'5';
+}
+function fmt(n){return Math.round(n).toLocaleString();}
+function pct(a,b){return b===0?'0.0%':(a/b*100).toFixed(1)+'%';}
+function escH(v){return String(v??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+// ─── Multi-Select ─────────────────────────────────────────────────────────────
+function toggleMs(e,id){
+  e.stopPropagation();
+  const wrap=document.getElementById(id);
+  const isOpen=wrap.classList.contains('open');
+  document.querySelectorAll('.ms-wrap.open').forEach(w=>w.classList.remove('open'));
+  if(!isOpen)wrap.classList.add('open');
+}
+document.addEventListener('click',()=>{document.querySelectorAll('.ms-wrap.open').forEach(w=>w.classList.remove('open'));});
+function getMsValues(id){
+  const drop=document.getElementById(id+'-drop');
+  if(!drop)return'all';
+  const allCb=drop.querySelector('input[value="all"]');
+  if(!allCb||allCb.checked)return'all';
+  const checked=Array.from(drop.querySelectorAll('input[type=checkbox]:not([value="all"])')).filter(c=>c.checked).map(c=>c.value);
+  return checked.length>0?checked:'all';
+}
+function updateMsLabel(id){
+  const btn=document.querySelector(`#${id}>.ms-btn`);
+  if(!btn)return;
+  const ph=btn.dataset.ph||'All';
+  const vals=getMsValues(id);
+  if(vals==='all'){btn.textContent=ph;}
+  else if(vals.length===1){btn.textContent=vals[0].length>20?vals[0].slice(0,18)+'…':vals[0];}
+  else{btn.textContent=`${vals.length} selected`;}
+}
+function populateMsDrop(id,options){
+  const drop=document.getElementById(id+'-drop');
+  if(!drop)return;
+  const allHtml=`<label class="ms-item"><input type="checkbox" value="all" checked onchange="handleMsAll('${escH(id)}',this)"> All</label><div class="ms-divider"></div>`;
+  const itemsHtml=options.map(o=>`<label class="ms-item"><input type="checkbox" value="${escH(o.value)}" onchange="handleMsCb('${escH(id)}',this)"> ${escH(o.label)}</label>`).join('');
+  drop.innerHTML=allHtml+itemsHtml;
+  updateMsLabel(id);
+}
+function handleMsAll(id,cb){
+  const drop=document.getElementById(id+'-drop');
+  if(cb.checked){drop.querySelectorAll('input[type=checkbox]:not([value="all"])').forEach(c=>c.checked=false);}
+  else{cb.checked=true;}
+  updateMsLabel(id);applyFilters();
+}
+function handleMsCb(id,cb){
+  const drop=document.getElementById(id+'-drop');
+  const allCb=drop.querySelector('input[value="all"]');
+  if(cb.checked){allCb.checked=false;}
+  else{const any=Array.from(drop.querySelectorAll('input[type=checkbox]:not([value="all"])')).some(c=>c.checked);if(!any)allCb.checked=true;}
+  updateMsLabel(id);applyFilters();
+}
+function resetMs(id){
+  const drop=document.getElementById(id+'-drop');
+  if(!drop)return;
+  drop.querySelectorAll('input[type=checkbox]').forEach(c=>{c.checked=(c.value==='all');});
+  updateMsLabel(id);
+}
+function onDateChange(){
+  const from=document.getElementById('f-from').value;
+  const to=document.getElementById('f-to').value;
+  document.getElementById('date-range-group').classList.toggle('active',!!(from||to));
+  applyFilters();
+}
+function setStatus(ok,msg){
+  const el=document.getElementById('load-status');
+  if(!el)return;
+  el.textContent=(ok?'✅ ':'❌ ')+msg;
+  el.className='status-pill '+(ok?'good':'bad');
+}
+
+// ─── GViz / Sheet loading ─────────────────────────────────────────────────────
+function parseGviz(payload){
+  let json=payload;
+  if(typeof payload==='string'){
+    const start=payload.indexOf('{');const end=payload.lastIndexOf('}');
+    if(start<0||end<start)throw new Error('GViz response was not JSON.');
+    json=JSON.parse(payload.slice(start,end+1));
+  }
+  if(json.status==='error')throw new Error((json.errors&&json.errors[0]&&json.errors[0].detailed_message)||'GViz error.');
+  return json;
+}
+function cellValue(row,index){
+  const cell=row.c&&row.c[index];
+  if(!cell)return'';
+  const value=cell.f!==undefined&&cell.f!==null?cell.f:cell.v;
+  return cleanText(value);
+}
+function mapRows(rows){
+  return rows.slice(1).map(r=>({
+    caseOwner:   cellValue(r,0),
+    caseNumber:  cellValue(r,1),
+    studentId:   cellValue(r,3),
+    dateOpened:  cellValue(r,4),
+    product:     cellValue(r,5),
+    country:     cellValue(r,6),
+    solvedDate:  cellValue(r,7),
+    solvedBy:    cellValue(r,8),
+    reasonJ:     cellValue(r,9),
+    resolution:  cellValue(r,10),
+    renewal:     cellValue(r,11),
+    abs60:       cellValue(r,12),
+    lastModified:cellValue(r,13),
+    assignedDate:cellValue(r,14),     // Col O – First Welcome/Absenteeism Date/Time
+    secondaryReason:cellValue(r,16),  // Col Q – Secondary Reason
+    studentGrade:cellValue(r,17)      // Col R – Student Grade
+  })).filter(r=>r.caseNumber!==''&&r.caseNumber.toLowerCase()!=='case number');
+}
+
+function fetchSheetViaJsonp(sheetName){
+  return new Promise((resolve,reject)=>{
+    const callback=`__gvizCb_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+    const tqx=`out:json;responseHandler:${callback}`;
+    const url=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=${encodeURIComponent(tqx)}&headers=0&sheet=${encodeURIComponent(sheetName)}&cacheBust=${Date.now()}`;
+    const script=document.createElement('script');
+    const cleanup=()=>{clearTimeout(timer);delete window[callback];script.remove();};
+    const timer=setTimeout(()=>{cleanup();reject(new Error(`Timed out: ${sheetName}`));},30000);
+    window[callback]=payload=>{try{resolve(parseGviz(payload));}catch(e){reject(e);}finally{cleanup();}};
+    script.onerror=()=>{cleanup();reject(new Error(`Load failed: ${sheetName}`));};
+    script.src=url;document.head.appendChild(script);
+  });
+}
+function fetchSheetViaJsonpByGid(gid){
+  return new Promise((resolve,reject)=>{
+    const callback=`__gvizCb_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+    const tqx=`out:json;responseHandler:${callback}`;
+    const url=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=${encodeURIComponent(tqx)}&headers=0&gid=${gid}&cacheBust=${Date.now()}`;
+    const script=document.createElement('script');
+    const cleanup=()=>{clearTimeout(timer);delete window[callback];script.remove();};
+    const timer=setTimeout(()=>{cleanup();reject(new Error(`Timed out: gid=${gid}`));},30000);
+    window[callback]=payload=>{try{resolve(parseGviz(payload));}catch(e){reject(e);}finally{cleanup();}};
+    script.onerror=()=>{cleanup();reject(new Error(`Load failed: gid=${gid}`));};
+    script.src=url;document.head.appendChild(script);
+  });
+}
+async function fetchSheet(sheetName){
+  const json=await fetchSheetViaJsonp(sheetName);
+  const rows=(json.table&&json.table.rows)||[];
+  const records=mapRows(rows);
+  if(records.length===0)throw new Error(`No rows: ${sheetName}`);
+  return{sheetName,records};
+}
+async function loadAttendanceData(){
+  const statusEl=document.getElementById('attn-status');
+  const contentEl=document.getElementById('outcome-content');
+
+  // ── Guard: no API URL configured yet ────────────────────────────────────────
+  if(!ATTENDANCE_API_URL){
+    attendanceLoaded=false;
+    statusEl.textContent='⚠ Attendance API not configured';
+    contentEl.innerHTML=`<div class="attn-loading">
+      ⚙️ Attendance data not connected yet.<br>
+      <span style="font-size:10px">Paste your Apps Script Web App URL into the<br>
+      <code style="background:var(--navy4);padding:1px 5px;border-radius:3px">ATTENDANCE_API_URL</code>
+      constant at the top of this file.</span></div>`;
+    return;
+  }
+
+  try{
+    statusEl.textContent='Loading attendance...';
+
+    // FIX: Load ALL student IDs from allData once on startup.
+    // Attendance is cached in memory; filters reuse the cached attendanceMap — no re-fetching.
+    const neededIds=[...new Set(
+      allData
+        .filter(r=>r.studentId&&r.studentId.trim())
+        .map(r=>r.studentId.trim().toLowerCase())
+    )];
+
+    let url=ATTENDANCE_API_URL;
+    // If we have a manageable number of IDs, send them as a filter param
+    // (Apps Script will only return those rows — much faster)
+    if(neededIds.length>0&&neededIds.length<=2000){
+      url+=`${url.includes('?')?'&':'?'}ids=${encodeURIComponent(neededIds.join(','))}`;
+    }
+
+    const resp=await fetch(url);
+    if(!resp.ok)throw new Error(`HTTP ${resp.status}: ${resp.statusText}`);
+    const data=await resp.json();
+    if(!data.ok)throw new Error(data.error||'Unknown error from attendance API');
+
+    // Col A=leadId, Col B=date, Col E=batch, Col J=present (0/1), cancellationReason
+    attendanceData=(data.records||[]).map(r=>({
+      leadId:       cleanText(r.leadId),
+      date:         cleanText(r.date),
+      batch:        cleanText(r.batch),
+      present:      cleanText(r.present),   // "0" or "1"
+      cancelReason: cleanText(r.cancelReason||r.cancellationReason||r.cancel_reason||r.cancellation_reason||'')
+    })).filter(r=>r.leadId&&r.date);
+
+    attendanceMap={};
+    attendanceData.forEach(r=>{
+      const k=r.leadId.toLowerCase();
+      if(!attendanceMap[k])attendanceMap[k]=[];
+      attendanceMap[k].push(r);
+    });
+    Object.values(attendanceMap).forEach(arr=>{
+      arr.sort((a,b)=>{
+        const da=parseAttendanceDate(a.date),db=parseAttendanceDate(b.date);
+        return(da||0)-(db||0);
+      });
+    });
+    attendanceLoaded=true;
+
+    const fileLabel=data.file?` · ${data.file}`:'';
+    statusEl.textContent=`✓ ${attendanceData.length.toLocaleString()} records${fileLabel}`;
+    // Both panels use the same filtered ticket population
+    renderOutcomeAnalysis(currentFilteredData);
+    renderAttendanceIntelligence(currentFilteredData);
+
+  }catch(e){
+    attendanceLoaded=false;
+    statusEl.textContent='⚠ Attendance unavailable';
+    contentEl.innerHTML=`<div class="attn-loading">
+      ⚠️ Attendance API temporarily unavailable. Salesforce metrics are still available.<br>
+      <span style="font-size:10px">Error: ${escH(e.message)}</span></div>`;
+    console.warn('Attendance load failed:',e);
+  }
+}
+async function loadSheetData(force=false){
+  try{
+    setStatus(true,'Loading...');
+    if(sheetCache&&!force){
+      allData=sheetCache.records;
+      populateFilters();applyFilters();
+      setStatus(true,`Loaded ${allData.length.toLocaleString()} cached records`);
+      return;
+    }
+    let loaded=null,lastError=null;
+    for(const sheetName of SHEET_NAMES){
+      try{loaded=await fetchSheet(sheetName);break;}
+      catch(err){lastError=err;}
+    }
+    if(!loaded)throw lastError||new Error('No sheet data.');
+    allData=loaded.records;
+    sheetCache={records:allData,sheetName:loaded.sheetName,loadedAt:new Date()};
+    populateFilters();applyFilters();
+    document.getElementById('last-updated').textContent='Updated: '+new Date().toLocaleString('en-IN',{dateStyle:'medium',timeStyle:'short'});
+    setStatus(true,`Loaded ${allData.length.toLocaleString()} records from ${loaded.sheetName}`);
+    refreshDailyView();
+    // Load attendance data in background
+    loadAttendanceData().catch(()=>{});
+  }catch(e){
+    allData=[];populateFilters();applyFilters();
+    setStatus(false,'Load failed: publish the Sheet or check sharing');
+    console.error(e);
+  }
+}
+
+// ─── Populate Filters ─────────────────────────────────────────────────────────
+const MONTH_NAMES=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+function populateFilters(){
+  const years=new Set(),months=new Set(),products=new Set(),owners=new Set();
+  allData.forEach(r=>{
+    const d=parseDate(r.dateOpened);
+    if(d){years.add(d.getFullYear());months.add((d.getMonth()+1)+'_'+d.getFullYear());}
+    if(r.product)products.add(r.product);
+    if(r.caseOwner)owners.add(r.caseOwner);
+  });
+  populateMsDrop('ms-year',[...years].sort().reverse().map(y=>({value:String(y),label:String(y)})));
+  const sortedMonths=[...months].sort((a,b)=>{const[ma,ya]=a.split('_').map(Number),[mb,yb]=b.split('_').map(Number);return yb-ya||mb-ma;});
+  populateMsDrop('ms-month',sortedMonths.map(mk=>{const[m,y]=mk.split('_');return{value:mk,label:`${MONTH_NAMES[parseInt(m)-1]} ${y}`};}));
+  populateMsDrop('ms-week',[{value:'1',label:'1st – 7th'},{value:'2',label:'8th – 14th'},{value:'3',label:'15th – 21st'},{value:'4',label:'22nd – 28th'},{value:'5',label:'29th – 31st'}]);
+  populateMsDrop('ms-product',[...products].sort().map(p=>({value:p,label:p})));
+  populateMsDrop('ms-owner',[...owners].sort().map(o=>({value:o,label:o})));
+}
+
+function geoClick(btn,geo){document.getElementById('f-geo').value=geo;syncGeoButtons(geo);applyFilters();}
+function syncGeoButtons(geo){document.querySelectorAll('.geo-btn').forEach(b=>{b.classList.toggle('active',b.dataset.geo===geo);});}
+function clearFilters(){
+  ['ms-year','ms-month','ms-week','ms-product','ms-owner'].forEach(id=>resetMs(id));
+  const fg=document.getElementById('f-geo');if(fg)fg.value='all';
+  document.getElementById('f-from').value='';document.getElementById('f-to').value='';
+  document.getElementById('date-range-group').classList.remove('active');
+  document.querySelectorAll('.geo-btn').forEach(b=>{b.classList.remove('active');if(b.dataset.geo==='all')b.classList.add('active');});
+  applyFilters();
+}
+function applyFilters(){
+  const fYear=getMsValues('ms-year'),fMonth=getMsValues('ms-month'),fWeek=getMsValues('ms-week');
+  const fGeo=document.getElementById('f-geo').value;
+  const fReportMode=document.getElementById('f-report-mode').value;
+  const fProduct=getMsValues('ms-product'),fOwner=getMsValues('ms-owner');
+  const fromDateRaw=parseDateInput(document.getElementById('f-from').value);
+  const toDateRaw=parseDateInput(document.getElementById('f-to').value);
+  const useDateRange=!!(fromDateRaw||toDateRaw);
+  const fromDate=fromDateRaw;
+  const toDate=toDateRaw||(fromDateRaw?fromDateRaw:null);
+  const filtered=allData.filter(r=>{
+    if(fReportMode==='renewal'&&r.renewal!=='1')return false;
+    const d=parseDate(r.dateOpened);
+    if(useDateRange){
+      const bizDate=getBusinessDate(r);if(!bizDate)return false;
+      const bizInt=dateToInt(bizDate);
+      if(fromDate&&bizInt<dateToInt(fromDate))return false;
+      if(toDate&&bizInt>dateToInt(toDate))return false;
+    }else{
+      if(fYear!=='all'&&(!d||!fYear.includes(String(d.getFullYear()))))return false;
+      if(fMonth!=='all'){if(!d)return false;const mk=(d.getMonth()+1)+'_'+d.getFullYear();if(!fMonth.includes(mk))return false;}
+      if(fWeek!=='all'){if(!d)return false;if(!fWeek.includes(getWeekBucket(d)))return false;}
+    }
+    const geo=getGeo(r.country);
+    if(fGeo!=='all'){
+      if(fGeo==='INROW'){if(geo==='CA/US')return false;}
+      else if((fGeo==='ROW'&&geo!=='ROW')||(fGeo==='IN'&&geo!=='IN')||(fGeo==='CAUS'&&geo!=='CA/US'))return false;
+    }
+    if(fProduct!=='all'&&!fProduct.includes(r.product))return false;
+    if(fOwner!=='all'&&!fOwner.includes(r.caseOwner))return false;
+    return true;
+  });
+  currentFilteredData=filtered;
+  syncGeoButtons(fGeo);
+  document.getElementById('row-count').textContent=`${filtered.length.toLocaleString()} records`;
+  renderAll(filtered);
+  // FIX: Attendance is loaded once at startup and cached. No re-fetch on filter change.
+  // renderAll → renderAttendanceIntelligence filters attendanceMap by current ticket student IDs.
+}
+
+// ─── Render All ───────────────────────────────────────────────────────────────
+function renderAll(data){
+  const total=data.length;
+  const dialed=data.filter(r=>isDialed(r.reasonJ)).length;
+  const connected=data.filter(r=>isConnectedExact(r.reasonJ)).length;
+  const uniqueIds=new Set(data.filter(r=>isConnectedExact(r.reasonJ)).map(r=>r.studentId)).size;
+  const renTotal=data.filter(r=>r.renewal==='1').length;
+  const renDialed=data.filter(r=>r.renewal==='1'&&isDialed(r.reasonJ)).length;
+  const renConn=data.filter(r=>r.renewal==='1'&&isConnectedExact(r.reasonJ)).length;
+  const dialPct=total>0?(dialed/total*100).toFixed(1):0;
+  const connPct=dialed>0?(connected/dialed*100).toFixed(1):0;
+  const renPct=connected>0?(renConn/connected*100).toFixed(2):0;
+
+  document.getElementById('k-total').textContent=fmt(total);
+  document.getElementById('k-dialed').textContent=fmt(dialed);
+  document.getElementById('k-conn').textContent=fmt(connected);
+  document.getElementById('k-unique').textContent=fmt(uniqueIds);
+  document.getElementById('k-abs60').textContent=fmt(data.filter(r=>Number(r.abs60)>0).length);
+  const missedFirstSession=data.filter(r=>isMissedFirstSession(r.secondaryReason)).length;
+  document.getElementById('k-missed-first').textContent=fmt(missedFirstSession);
+
+  const activeAssociates=new Set(data.filter(r=>r.caseOwner&&cleanText(r.caseOwner).toLowerCase()!=='absenteeism team').map(r=>r.caseOwner)).size;
+  const dailyTarget=activeAssociates*70;
+  const uniqueDays=new Set(data.map(r=>{const d=parseDate(r.dateOpened);return d?dateToInt(d):null;}).filter(Boolean)).size;
+  const dailyDialed=uniqueDays>0?dialed/uniqueDays:dialed;
+  const achievementPct=dailyTarget>0?(dailyDialed/dailyTarget*100).toFixed(1):0;
+  document.getElementById('k-associates').textContent=fmt(activeAssociates);
+  document.getElementById('k-target').textContent=fmt(dailyTarget);
+  document.getElementById('k-achievement').textContent=achievementPct+'%';
+  const achvEl=document.getElementById('k-achv-pill');
+  achvEl.textContent=`${Math.round(dailyDialed)}/day avg of ${fmt(dailyTarget)} target`;
+  achvEl.className='kpi-pct '+(achievementPct>=100?'good':achievementPct>=70?'mid':'low');
+
+  const dpEl=document.getElementById('k-dial-pct');dpEl.textContent=`Dial: ${dialPct}%`;dpEl.className='kpi-pct '+(dialPct>=50?'good':dialPct>=30?'mid':'low');
+  const cpEl=document.getElementById('k-conn-pct');cpEl.textContent=`Connect: ${connPct}%`;cpEl.className='kpi-pct '+(connPct>=35?'good':connPct>=20?'mid':'low');
+
+  document.getElementById('rf1').textContent=fmt(renTotal);
+  document.getElementById('rf2').textContent=fmt(renDialed);document.getElementById('rf2p').textContent=pct(renDialed,renTotal);
+  document.getElementById('rf3').textContent=fmt(renConn);document.getElementById('rf3p').textContent=pct(renConn,renTotal);
+
+  renderTicketBreakdown(data);
+  renderGauge(parseFloat(connPct));
+  renderDialConnBar(parseFloat(dialPct),parseFloat(connPct));
+  renderReasons(data,connected);
+  renderResolutionTable(data);
+  renderTrend(data);
+  renderProduct(data);
+  renderOwner(data);
+  renderFunnelGeo(data);
+  // Insight Hub
+  renderPipeline(data);
+  renderRepeatAbsentees(data);
+  // Outcome + Attendance Intelligence share the same filtered ticket population
+  if(attendanceLoaded){renderOutcomeAnalysis(data);renderAttendanceIntelligence(data);}
+}
+
+function renderTicketBreakdown(data){
+  const counts={connected:0,system:0,rnr:0,trainer:0,noreason:0,blank:0,refund:0,other:0};
+  data.forEach(r=>{if(String(r.solvedBy).trim().toLowerCase()==='system')counts.system++;counts[getTicketBreakdownType(r.reasonJ)]++;});
+  const items=[
+    {num:counts.connected,label:'Connected to parent — cases analyzed',color:'var(--teal)'},
+    {num:counts.system,label:'System Auto Closed',color:'var(--blue)'},
+    {num:counts.rnr,label:'RNR — not connected',color:'var(--red)'},
+    {num:counts.trainer,label:'Trainer side cancellation',color:'var(--yellow)'},
+    {num:counts.noreason,label:'Reason not captured',color:'var(--purple)'},
+    {num:counts.blank,label:'Blank / not actioned',color:'var(--muted)'},
+  ].concat(counts.refund>0?[{num:counts.refund,label:'Refund Related Issues',color:'var(--red)'}]:[])
+   .concat(counts.other>0?[{num:counts.other,label:'Other unmapped reason',color:'var(--muted)'}]:[]);
+  document.getElementById('ticket-breakdown').innerHTML=items.map(i=>`<div class="tb-item"><div class="tb-dot" style="background:${i.color}"></div><div class="tb-num" style="color:${i.color}">${fmt(i.num)}</div><div class="tb-label">${i.label}</div></div>`).join('');
+}
+
+function renderGauge(val){
+  const canvas=document.getElementById('gaugeChart');
+  const ctx=canvas.getContext('2d');
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  const cx=110,cy=120,r=90,start=Math.PI,end=2*Math.PI;
+  [{color:'#ef4444',from:0,to:.25},{color:'#eab308',from:.25,to:.5},{color:'#22c55e',from:.5,to:1}].forEach(s=>{
+    ctx.beginPath();ctx.arc(cx,cy,r,start+s.from*Math.PI,start+s.to*Math.PI);ctx.lineWidth=18;ctx.strokeStyle=s.color;ctx.stroke();
+  });
+  const angle=start+(val/100)*Math.PI;
+  const nx=cx+Math.cos(angle)*70,ny=cy+Math.sin(angle)*70;
+  ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(nx,ny);ctx.lineWidth=3;ctx.strokeStyle='#e8eaf0';ctx.stroke();
+  ctx.beginPath();ctx.arc(cx,cy,6,0,2*Math.PI);ctx.fillStyle='#e8eaf0';ctx.fill();
+  document.getElementById('gauge-val').textContent=val.toFixed(1)+'%';
+}
+function renderDialConnBar(dialPct,connPct){
+  const ctx=document.getElementById('dialConnBar').getContext('2d');
+  if(dialConnBarChart)dialConnBarChart.destroy();
+  dialConnBarChart=new Chart(ctx,{type:'bar',data:{labels:['Dial %','Connect %'],datasets:[{data:[dialPct,connPct],backgroundColor:['#3b82f6','#14b8a6'],borderRadius:6,barThickness:36}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{label:v=>v.raw.toFixed(1)+'%'}}},scales:{x:{max:100,ticks:{color:'#8892a4',font:{size:10},callback:v=>v+'%'},grid:{color:'rgba(45,58,82,.5)'},border:{color:'transparent'}},y:{ticks:{color:'#e8eaf0',font:{size:11}},grid:{display:false},border:{color:'transparent'}}}}});
+}
+function renderReasons(data,totalConnected){
+  const counts={};
+  data.forEach(r=>{if(isConnectedExact(r.reasonJ)){const k=r.reasonJ.trim();counts[k]=(counts[k]||0)+1;}});
+  const sorted=Object.entries(counts).sort((a,b)=>b[1]-a[1]);
+  const grand=sorted.reduce((s,[,v])=>s+v,0);
+  document.getElementById('reasons-body').innerHTML=sorted.map(([reason,count])=>{
+    const p=grand>0?(count/grand*100).toFixed(1):0;
+    return`<tr><td>${escH(reason)}</td><td style="font-family:'DM Mono',monospace">${fmt(count)}</td><td><span class="pct-bar" style="width:${Math.min(Math.round(parseFloat(p)),60)}px"></span>${p}%</td></tr>`;
+  }).join('')+`<tr><td style="font-weight:600">Grand Total</td><td style="font-family:'DM Mono',monospace;font-weight:600">${fmt(grand)}</td><td></td></tr>`;
+}
+function renderResolutionTable(data){
+  const counts={};
+  data.forEach(r=>{const k=cleanText(r.resolution)||'(Blank/Not Actioned)';counts[k]=(counts[k]||0)+1;});
+  const rows=Object.entries(counts).filter(([k])=>k!=='(Blank/Not Actioned)'&&k!=='RNR').sort((a,b)=>b[1]-a[1]);
+  document.getElementById('resolution-body').innerHTML=rows.map(([k,v])=>`<tr><td>${escH(k)}</td><td style="font-family:'DM Mono',monospace">${fmt(v)}</td></tr>`).join('')+`<tr><td style="font-weight:600">Grand Total</td><td style="font-family:'DM Mono',monospace;font-weight:600">${fmt(rows.reduce((s,x)=>s+x[1],0))}</td></tr>`;
+}
+function renderTrend(data){
+  const byMonth={};
+  data.forEach(r=>{const d=parseDate(r.dateOpened);if(!d)return;const k=getMonthKey(d);if(!byMonth[k])byMonth[k]={total:0,dialed:0,connected:0};byMonth[k].total++;if(isDialed(r.reasonJ))byMonth[k].dialed++;if(isConnectedExact(r.reasonJ))byMonth[k].connected++;});
+  const keys=Object.keys(byMonth).sort();
+  const labels=keys.map(k=>{const[y,m]=k.split('-');return`${MONTH_NAMES[parseInt(m)-1]} ${y}`;});
+  const ctx=document.getElementById('trendLine').getContext('2d');
+  if(trendLineChart)trendLineChart.destroy();
+  trendLineChart=new Chart(ctx,{type:'line',data:{labels,datasets:[{label:'Created',data:keys.map(k=>byMonth[k].total),borderColor:'#f97316',backgroundColor:'rgba(249,115,22,.1)',tension:.3,fill:true,pointRadius:4},{label:'Dialed',data:keys.map(k=>byMonth[k].dialed),borderColor:'#3b82f6',backgroundColor:'transparent',tension:.3,fill:false,pointRadius:4,borderDash:[5,3]},{label:'Connected',data:keys.map(k=>byMonth[k].connected),borderColor:'#14b8a6',backgroundColor:'transparent',tension:.3,fill:false,pointRadius:4,borderDash:[2,2]}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false}},scales:{x:{ticks:{color:'#8892a4',font:{size:10},autoSkip:false,maxRotation:30},grid:{color:'rgba(45,58,82,.5)'},border:{color:'transparent'}},y:{ticks:{color:'#8892a4',font:{size:10}},grid:{color:'rgba(45,58,82,.3)'},border:{color:'transparent'}}}}});
+  const wrap=document.getElementById('trendLine').parentElement;
+  if(!wrap.previousElementSibling||!wrap.previousElementSibling.dataset.legend){
+    const leg=document.createElement('div');leg.style.cssText='display:flex;gap:16px;font-size:11px;color:#8892a4;margin-bottom:6px;flex-wrap:wrap';leg.dataset.legend='1';
+    leg.innerHTML=`<span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:3px;background:#f97316;display:inline-block;border-radius:2px"></span>Created</span><span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:3px;background:#3b82f6;display:inline-block;border-radius:2px"></span>Dialed</span><span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:3px;background:#14b8a6;display:inline-block;border-radius:2px"></span>Connected</span>`;
+    wrap.parentElement.insertBefore(leg,wrap);
+  }
+}
+function renderProduct(data){
+  const byProduct={};
+  data.forEach(r=>{const k=r.product||'(Unknown)';if(!byProduct[k])byProduct[k]={dialed:0,connected:0};if(isDialed(r.reasonJ))byProduct[k].dialed++;if(isConnectedExact(r.reasonJ))byProduct[k].connected++;});
+  const keys=Object.keys(byProduct).sort((a,b)=>byProduct[b].dialed-byProduct[a].dialed).slice(0,7);
+  const ctx=document.getElementById('productBar').getContext('2d');
+  if(productBarChart)productBarChart.destroy();
+  productBarChart=new Chart(ctx,{type:'bar',data:{labels:keys,datasets:[{label:'Dialed',data:keys.map(k=>byProduct[k].dialed),backgroundColor:'#3b82f6',borderRadius:4,barThickness:14},{label:'Connected',data:keys.map(k=>byProduct[k].connected),backgroundColor:'#14b8a6',borderRadius:4,barThickness:14}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false}},scales:{x:{ticks:{color:'#8892a4',font:{size:9},maxRotation:30,autoSkip:false},grid:{color:'rgba(45,58,82,.4)'},border:{color:'transparent'}},y:{ticks:{color:'#8892a4',font:{size:10}},grid:{color:'rgba(45,58,82,.3)'},border:{color:'transparent'}}}}});
+}
+function renderOwner(data){
+  const DIAL_TARGET=70;const SYSTEM_QUEUE='absenteeism team';
+  const byOwner={};
+  data.forEach(r=>{
+    const k=r.caseOwner||'(Unknown)';
+    if(!byOwner[k])byOwner[k]={total:0,dialed:0,connected:0,students:new Set(),renTotal:0,renConn:0,isSystem:cleanText(k).toLowerCase()===SYSTEM_QUEUE};
+    byOwner[k].total++;
+    if(isDialed(r.reasonJ))byOwner[k].dialed++;
+    if(isConnectedExact(r.reasonJ)){byOwner[k].connected++;if(r.studentId)byOwner[k].students.add(r.studentId);}
+    if(r.renewal==='1'){byOwner[k].renTotal++;if(isConnectedExact(r.reasonJ))byOwner[k].renConn++;}
+  });
+  const tbody=document.getElementById('owner-body');
+  const entries=Object.entries(byOwner).sort((a,b)=>b[1].total-a[1].total);
+  let gT=0,gD=0,gC=0,gU=0,gR=0,gRC=0;
+  tbody.innerHTML=entries.map(([name,d])=>{
+    gT+=d.total;gD+=d.dialed;gC+=d.connected;gU+=d.students.size;gR+=d.renTotal;gRC+=d.renConn;
+    const dp=d.total>0?(d.dialed/d.total*100).toFixed(1):0;
+    const cp=d.dialed>0?(d.connected/d.dialed*100).toFixed(1):0;
+    const cpClass=parseFloat(cp)>=35?'good':parseFloat(cp)>=20?'mid':'low';
+    const dpClass=parseFloat(dp)>=50?'good':parseFloat(dp)>=30?'mid':'low';
+    const target=d.isSystem?'—':DIAL_TARGET;
+    const achv=d.isSystem?'—':(DIAL_TARGET>0?(d.dialed/DIAL_TARGET*100).toFixed(1)+'%':'0%');
+    const achvClass=d.isSystem?'':parseFloat(achv)>=100?'good':parseFloat(achv)>=70?'mid':'low';
+    return`<tr><td style="font-weight:500">${escH(name)}</td><td class="center" style="font-family:'DM Mono',monospace">${fmt(d.total)}</td><td class="center" style="font-family:'DM Mono',monospace">${fmt(d.dialed)}</td><td class="center"><span class="pct-pill ${dpClass}">${dp}%</span></td><td class="center" style="font-family:'DM Mono',monospace">${fmt(d.connected)}</td><td class="center"><span class="pct-pill ${cpClass}">${cp}%</span></td><td class="center" style="font-family:'DM Mono',monospace">${fmt(d.students.size)}</td><td class="center" style="font-family:'DM Mono',monospace">${fmt(d.renTotal)}</td><td class="center" style="font-family:'DM Mono',monospace">${fmt(d.renConn)}</td><td class="center" style="font-family:'DM Mono',monospace">${target}</td><td class="center"><span class="pct-pill ${achvClass}">${achv}</span></td></tr>`;
+  }).join('');
+  const activeCount=entries.filter(([,d])=>!d.isSystem).length;
+  const grandTarget=activeCount*DIAL_TARGET;
+  const grandAchv=grandTarget>0?(gD/grandTarget*100).toFixed(1)+'%':'—';
+  tbody.innerHTML+=`<tr style="font-weight:bold;background:#1b2335;border-top:2px solid #3b82f6;"><td>Grand Total</td><td class="center">${fmt(gT)}</td><td class="center">${fmt(gD)}</td><td class="center">${gT===0?'0.0':(gD/gT*100).toFixed(1)}%</td><td class="center">${fmt(gC)}</td><td class="center">${gD===0?'0.0':(gC/gD*100).toFixed(1)}%</td><td class="center">${fmt(gU)}</td><td class="center">${fmt(gR)}</td><td class="center">${fmt(gRC)}</td><td class="center">${fmt(grandTarget)}</td><td class="center">${grandAchv}</td></tr>`;
+}
+function renderFunnelGeo(data){
+  const geos=['IN','ROW','CA/US'];const byGeo={};
+  geos.forEach(g=>byGeo[g]={total:0,dialed:0,connected:0});
+  data.forEach(r=>{const g=getGeo(r.country);const bucket=geos.includes(g)?g:'Other';if(!byGeo[bucket])byGeo[bucket]={total:0,dialed:0,connected:0};byGeo[bucket].total++;if(isDialed(r.reasonJ))byGeo[bucket].dialed++;if(isConnectedExact(r.reasonJ))byGeo[bucket].connected++;});
+  const maxTotal=Math.max(...geos.map(g=>byGeo[g].total),1);
+  document.getElementById('funnel-geo').innerHTML=geos.filter(g=>byGeo[g]&&byGeo[g].total>0).map(g=>{
+    const d=byGeo[g];const tW=Math.round(d.total/maxTotal*100);const dialW=d.total>0?Math.round(d.dialed/d.total*100):0;const connW=d.total>0?Math.round(d.connected/d.total*100):0;
+    return`<div style="margin-bottom:10px"><div style="display:flex;align-items:center;gap:8px;margin-bottom:4px"><span style="font-size:11px;font-weight:600;color:var(--white);width:44px">${g}</span><div style="flex:1;background:var(--navy4);border-radius:4px;height:10px;overflow:hidden"><div style="width:${tW}%;height:100%;background:rgba(249,115,22,.3);border-radius:4px"></div></div><span style="font-size:10px;color:var(--muted);width:60px;text-align:right">${fmt(d.total)} tickets</span></div><div style="display:flex;gap:16px;padding-left:52px"><span style="font-size:10px;color:#3b82f6">Dial: ${dialW}%</span><span style="font-size:10px;color:#14b8a6">Connect: ${connW}%</span><span style="font-size:10px;color:var(--muted)">Unique: ${fmt(new Set(data.filter(r=>getGeo(r.country)===g&&isConnectedExact(r.reasonJ)).map(r=>r.studentId)).size)}</span></div></div>`;
+  }).join('');
+}
+
+// ─── Daily Productivity ───────────────────────────────────────────────────────
+const DIAL_PER_DAY=70;const SYS_QUEUE='absenteeism team';
+function getDataForBizDate(targetDate){
+  const ti=dateToInt(targetDate);
+  const fReportMode=document.getElementById('f-report-mode').value;
+  return allData.filter(r=>{
+    if(fReportMode==='renewal'&&r.renewal!=='1')return false;
+    const bd=getActivityDate(r);return bd&&dateToInt(bd)===ti;
+  });
+}
+function groupAssocs(data){
+  const map={};
+  data.forEach(r=>{if(!r.caseOwner||cleanText(r.caseOwner).toLowerCase()===SYS_QUEUE)return;const k=r.caseOwner;if(!map[k])map[k]={t:0,d:0,c:0};map[k].t++;if(isDialed(r.reasonJ))map[k].d++;if(isConnectedExact(r.reasonJ))map[k].c++;});
+  return map;
+}
+function allAssociates(){
+  const fReportMode=document.getElementById('f-report-mode').value;
+  return[...new Set(allData.filter(r=>r.caseOwner&&cleanText(r.caseOwner).toLowerCase()!==SYS_QUEUE&&(fReportMode!=='renewal'||r.renewal==='1')).map(r=>r.caseOwner))].sort();
+}
+function dpCls(dialed){return dialed>=DIAL_PER_DAY?'g':dialed>=50?'a':'r';}
+function renderDailyScorecard(date){
+  const data=getDataForBizDate(date);const byA=groupAssocs(data);const assocs=allAssociates();
+  const el=document.getElementById('daily-scorecard');if(!el)return;
+  const lbl=document.getElementById('dp-date-label');
+  if(lbl)lbl.textContent='— '+date.toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short',year:'numeric'});
+  const hasAny=assocs.some(n=>byA[n]&&byA[n].t>0);
+  if(!hasAny){el.innerHTML=`<div style="color:var(--muted);font-size:12px;padding:14px 0;text-align:center">No records for this business date.</div>`;return;}
+  const totalDialed=assocs.reduce((s,n)=>(byA[n]?s+byA[n].d:s),0);
+  const totalTarget=assocs.filter(n=>byA[n]&&byA[n].t>0).length*DIAL_PER_DAY;
+  const overallAchv=totalTarget>0?(totalDialed/totalTarget*100).toFixed(1):0;
+  el.innerHTML=`<div style="display:flex;gap:16px;margin-bottom:12px;flex-wrap:wrap"><span style="font-size:11px;color:var(--muted)">Active today: <strong style="color:var(--white)">${assocs.filter(n=>byA[n]&&byA[n].t>0).length}</strong></span><span style="font-size:11px;color:var(--muted)">Total dials: <strong style="color:var(--white)">${totalDialed}</strong></span><span style="font-size:11px;color:var(--muted)">Target: <strong style="color:var(--white)">${totalTarget}</strong></span><span style="font-size:11px;color:var(--muted)">Overall: <strong style="color:${overallAchv>=100?'var(--green)':overallAchv>=70?'var(--yellow)':'var(--red)'}">${overallAchv}%</strong></span></div>`+
+  assocs.map(name=>{
+    const d=byA[name]||{t:0,d:0,c:0};
+    if(d.t===0)return`<div class="dp-row" style="opacity:.35"><div class="dp-name">${escH(name)}</div><div class="dp-bar-track"></div><div class="dp-stat">0/${DIAL_PER_DAY}</div><span class="dp-badge r">No activity</span></div>`;
+    const fillPct=Math.min(d.d/DIAL_PER_DAY*100,100).toFixed(1);
+    const cls=dpCls(d.d);const achv=(d.d/DIAL_PER_DAY*100).toFixed(1);const connPct=d.d>0?(d.c/d.d*100).toFixed(1):'0.0';
+    return`<div class="dp-row"><div class="dp-name">${escH(name)}</div><div class="dp-bar-track"><div class="dp-bar-fill ${cls}" style="width:${fillPct}%"></div></div><div class="dp-stat">${d.d}/${DIAL_PER_DAY}</div><span class="dp-badge ${cls}">${achv}%</span><div class="dp-stat" style="color:var(--teal)">${connPct}% conn</div><div class="dp-stat">${d.t} tickets</div></div>`;
+  }).join('');
+}
+function renderRolling7(referenceDate){
+  const dates=[];for(let i=6;i>=0;i--)dates.push(new Date(referenceDate.getFullYear(),referenceDate.getMonth(),referenceDate.getDate()-i));
+  const assocs=allAssociates();
+  const cols=dates.map(d=>({date:d,label:d.toLocaleDateString('en-IN',{day:'numeric',month:'short'}),byA:groupAssocs(getDataForBizDate(d))}));
+  const el=document.getElementById('rolling-7');if(!el)return;
+  const hdrs=cols.map(c=>`<th>${c.label}</th>`).join('');
+  const rows=assocs.map(name=>{
+    const cells=cols.map(c=>{const d=c.byA[name];if(!d||d.t===0)return`<td><span class="rg-cell empty">—</span></td>`;const cls=dpCls(d.d);const connTip=d.d>0?(d.c/d.d*100).toFixed(1):0;return`<td><span class="rg-cell ${cls}" title="${d.t} tickets · ${d.d} dialed · ${d.c} connected · ${connTip}% conn">${d.d}/${DIAL_PER_DAY}</span></td>`;}).join('');
+    const tot=cols.reduce((s,c)=>{const d=c.byA[name];return d?{d:s.d+d.d,c:s.c+d.c,t:s.t+d.t}:s;},{d:0,c:0,t:0});
+    const avgAchv=tot.t>0?((tot.d/(cols.filter(c=>c.byA[name]&&c.byA[name].t>0).length||1)/DIAL_PER_DAY)*100).toFixed(0)+'%':'—';
+    return`<tr><td>${escH(name)}</td>${cells}<td style="color:var(--muted);font-size:10px">${avgAchv}<br><span style="color:rgba(136,146,164,.5)">avg</span></td></tr>`;
+  }).join('');
+  el.innerHTML=`<table class="rg-table"><thead><tr><th>Associate</th>${hdrs}<th style="color:var(--muted)">Avg</th></tr></thead><tbody>${rows}</tbody></table>`;
+}
+function refreshDailyView(){
+  if(!allData.length)return;
+  const val=document.getElementById('dp-date').value;
+  const date=val?parseDateInput(val):new Date();
+  if(!date)return;
+  renderDailyScorecard(date);renderRolling7(date);
+}
+
+// ─── Insight Hub Render Functions ─────────────────────────────────────────────
+
+function renderPipeline(data){
+  // Group by calendar date from Col O (assignedDate)
+  const byDate={};
+  data.forEach(r=>{
+    if(!r.assignedDate)return;
+    const d=parseDate(r.assignedDate);
+    if(!d)return;
+    const k=dateToInt(d);
+    byDate[k]=(byDate[k]||0)+1;
+  });
+  const keys=Object.keys(byDate).sort();
+  if(!keys.length){
+    document.getElementById('pipe-total').textContent='—';
+    document.getElementById('pipe-avg').textContent='—';
+    document.getElementById('pipe-max').textContent='—';
+    document.getElementById('pipe-days').textContent='—';
+    if(pipelineBarChart){pipelineBarChart.destroy();pipelineBarChart=null;}
+    return;
+  }
+  const vals=keys.map(k=>byDate[k]);
+  const total=vals.reduce((s,v)=>s+v,0);
+  const avg=keys.length>0?(total/keys.length).toFixed(1):0;
+  const maxVal=Math.max(...vals);
+  document.getElementById('pipe-total').textContent=fmt(total);
+  document.getElementById('pipe-avg').textContent=avg+'/day';
+  document.getElementById('pipe-max').textContent=fmt(maxVal);
+  document.getElementById('pipe-days').textContent=fmt(keys.length);
+
+  // Show last 30 days
+  const recent=keys.slice(-30);
+  const labels=recent.map(k=>{
+    const y=Math.floor(k/10000),m=Math.floor((k%10000)/100)-1,d=k%100;
+    return new Date(y,m,d).toLocaleDateString('en-IN',{day:'numeric',month:'short'});
+  });
+  const ctx=document.getElementById('pipelineBar').getContext('2d');
+  if(pipelineBarChart)pipelineBarChart.destroy();
+  pipelineBarChart=new Chart(ctx,{
+    type:'bar',
+    data:{labels,datasets:[{label:'Tickets Assigned',data:recent.map(k=>byDate[k]),backgroundColor:'rgba(249,115,22,.7)',borderColor:'#f97316',borderWidth:1,borderRadius:3}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:v=>`${v.raw} tickets assigned`}}},scales:{x:{ticks:{color:'#8892a4',font:{size:9},maxRotation:45,autoSkip:true,maxTicksLimit:15},grid:{display:false},border:{color:'transparent'}},y:{ticks:{color:'#8892a4',font:{size:10}},grid:{color:'rgba(45,58,82,.4)'},border:{color:'transparent'}}}}
+  });
+}
+
+function renderRepeatAbsentees(data){
+  const byStudent={};
+  data.forEach(r=>{
+    if(!r.studentId||!r.studentId.trim())return;
+    const k=r.studentId.trim();
+    if(!byStudent[k])byStudent[k]={count:0,reasons:{},products:new Set(),lastSeen:null};
+    byStudent[k].count++;
+    const reason=cleanText(r.reasonJ)||'(Blank)';
+    byStudent[k].reasons[reason]=(byStudent[k].reasons[reason]||0)+1;
+    if(r.product)byStudent[k].products.add(r.product);
+    const d=parseDate(r.dateOpened);
+    if(d&&(!byStudent[k].lastSeen||d>byStudent[k].lastSeen))byStudent[k].lastSeen=d;
+  });
+  const repeats=Object.entries(byStudent).filter(([,v])=>v.count>=2).sort((a,b)=>b[1].count-a[1].count);
+  document.getElementById('repeat-2plus').textContent=fmt(repeats.length);
+  document.getElementById('repeat-3plus').textContent=fmt(repeats.filter(([,v])=>v.count>=3).length);
+  document.getElementById('repeat-4plus').textContent=fmt(repeats.filter(([,v])=>v.count>=4).length);
+  const tbody=document.getElementById('repeat-body');
+  if(!repeats.length){tbody.innerHTML=`<tr><td colspan="5" style="color:var(--muted);text-align:center;padding:16px">No repeat absentees in current selection</td></tr>`;return;}
+  tbody.innerHTML=repeats.slice(0,25).map(([sid,d])=>{
+    const topReason=Object.entries(d.reasons).sort((a,b)=>b[1]-a[1])[0];
+    const cls=d.count>=4?'r':d.count>=3?'a':'g';
+    const risk=d.count>=4?'High Risk':d.count>=3?'Medium':'Repeat';
+    const prods=[...d.products].join(', ')||'—';
+    return`<tr>
+      <td style="font-family:'DM Mono',monospace;font-size:11px">${escH(sid)}</td>
+      <td class="center" style="font-family:'DM Mono',monospace;font-weight:600;color:${d.count>=4?'var(--red)':d.count>=3?'var(--yellow)':'var(--teal)'}">${d.count}</td>
+      <td style="font-size:11px;color:var(--muted);max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${escH(topReason?topReason[0]:'—')}">${escH(topReason?topReason[0]:'—')}</td>
+      <td style="font-size:11px;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escH(prods)}</td>
+      <td class="center"><span class="dp-badge ${cls}">${risk}</span></td>
+    </tr>`;
+  }).join('');
+  if(repeats.length>25){tbody.innerHTML+=`<tr><td colspan="5" style="color:var(--muted);font-size:11px;text-align:center;padding:8px">… and ${repeats.length-25} more</td></tr>`;}
+}
+
+// ─── Region mapping ───────────────────────────────────────────────────────────
+const REGION_MAP={
+  'AE':'ME','OM':'ME','SA':'ME','QA':'ME','KW':'ME','BH':'ME','ZA':'ME','PK':'ME',
+  'RW':'ME','TN':'ME','AF':'ME','GH':'ME','ZW':'ME','NE':'ME',
+  'US':'USA','CA':'USA',
+  'PH':'SEA','MY':'SEA','HK':'SEA','SG':'SEA','TH':'SEA','ID':'SEA','LK':'SEA',
+  'AU':'ANZ','NZ':'ANZ',
+  'GB':'UK','DK':'UK','IE':'UK','NL':'UK','CH':'UK','SE':'UK','FI':'UK',
+  'FR':'UK','PL':'UK','NO':'UK','DE':'UK','CZ':'UK',
+  'IN':'IND'
+};
+const REGION_ORDER=['IND','ME','USA','SEA','ANZ','UK','Others'];
+function getRegion(country){
+  if(!country)return'Others';
+  return REGION_MAP[country.trim().toUpperCase()]||'Others';
+}
+
+function renderRegionalIntelligence(data){
+  const byRegion={};
+  REGION_ORDER.forEach(r=>{byRegion[r]={total:0,dialed:0,connected:0,reasons:{},resolutions:{},countries:new Set()};});
+
+  data.forEach(r=>{
+    const c=cleanText(r.country).toUpperCase()||'';
+    const region=getRegion(c)||'Others';
+    if(!byRegion[region])byRegion[region]={total:0,dialed:0,connected:0,reasons:{},resolutions:{},countries:new Set()};
+    byRegion[region].total++;
+    if(c)byRegion[region].countries.add(c);
+    if(isDialed(r.reasonJ))byRegion[region].dialed++;
+    if(isConnectedExact(r.reasonJ)){
+      byRegion[region].connected++;
+      const reason=cleanText(r.reasonJ);
+      if(reason)byRegion[region].reasons[reason]=(byRegion[region].reasons[reason]||0)+1;
+    }
+    const res=cleanText(r.resolution)||'(Blank)';
+    byRegion[region].resolutions[res]=(byRegion[region].resolutions[res]||0)+1;
+  });
+
+  const entries=REGION_ORDER.map(k=>[k,byRegion[k]]).filter(([,d])=>d.total>0);
+  const tbody=document.getElementById('regional-body');
+  if(!entries.length){tbody.innerHTML=`<tr><td colspan="8" style="color:var(--muted);text-align:center;padding:16px">No data</td></tr>`;return;}
+
+  tbody.innerHTML=entries.map(([region,d])=>{
+    const dialPct=d.total>0?(d.dialed/d.total*100).toFixed(1):0;
+    const connPct=d.dialed>0?(d.connected/d.dialed*100).toFixed(1):0;
+    const dpClass=parseFloat(dialPct)>=50?'good':parseFloat(dialPct)>=30?'mid':'low';
+    const cpClass=parseFloat(connPct)>=35?'good':parseFloat(connPct)>=20?'mid':'low';
+    const topRes=Object.entries(d.resolutions).sort((a,b)=>b[1]-a[1])[0];
+    const topReason=Object.entries(d.reasons).sort((a,b)=>b[1]-a[1])[0];
+    const countriesList=[...d.countries].sort().join(', ');
+    return`<tr>
+      <td>
+        <div style="font-weight:600;font-size:13px;color:var(--white)">${escH(region)}</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:2px">${escH(countriesList||'—')}</div>
+      </td>
+      <td class="center" style="font-family:'DM Mono',monospace">${fmt(d.total)}</td>
+      <td class="center" style="font-family:'DM Mono',monospace">${fmt(d.dialed)}</td>
+      <td class="center"><span class="pct-pill ${dpClass}">${dialPct}%</span></td>
+      <td class="center" style="font-family:'DM Mono',monospace">${fmt(d.connected)}</td>
+      <td class="center"><span class="pct-pill ${cpClass}">${connPct}%</span></td>
+      <td style="font-size:11px;color:var(--muted);max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${escH(topRes?topRes[0]:'—')}">${escH(topRes?topRes[0]:'—')}</td>
+      <td style="font-size:11px;color:var(--muted);max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${escH(topReason?topReason[0]:'—')}">${escH(topReason?topReason[0]:'—')}</td>
+    </tr>`;
+  }).join('');
+}
+
+function renderOutcomeAnalysis(data){
+  const el=document.getElementById('outcome-content');
+  if(!attendanceLoaded||!attendanceData.length){
+    el.innerHTML=`<div class="attn-loading">⏳ Waiting for attendance data from Quick Sight Dashboard...<br><span style="font-size:10px">Ensure the Apps Script endpoint is accessible</span></div>`;
+    return;
+  }
+
+  // ── V8 Reactivation Logic ─────────────────────────────────────────────────────
+  // Scope  : Connected calls ONLY — matches the top-KPI "Connected" count exactly
+  // Timing : Full datetime comparison via .getTime() milliseconds
+  // Skip   : Internal cancellations (cancelReason present but not "Student: noshow")
+  // Outcome: First VALID session after call — Present=1 → YES; 0/noshow → NO
+  // Excluded pre-filter: connected tickets missing solvedDate or studentId — also
+  //   logged to lastOutcomeResults so Export Eval accounts for every ticket.
+  // ─────────────────────────────────────────────────────────────────────────────
+
+  // All connected tickets — identical to the top-KPI "Connected" count.
+  // Every connected ticket now flows into the evaluation loop below — none
+  // are dropped here. Missing studentId / solvedDate get categorized inside
+  // the loop in Step 2, instead of being excluded before it ever runs.
+  const allConnectedTickets=data.filter(r=>isConnectedExact(r.reasonJ));
+  const connectedTickets=allConnectedTickets;
+
+  let evaluated=0,reactivated=0,notReactivated=0,batchTotal=0,batchReactivated=0;
+  const resByRes={};
+  lastOutcomeResults=[];
+
+  // ── Step 2: evaluate each eligible connected ticket ───────────────────────────
+  connectedTickets.forEach(ticket=>{
+    const studentIdRaw=cleanText(ticket.studentId);
+    const solvedDateRaw=cleanText(ticket.solvedDate);
+
+    const row={
+      caseNumber:              ticket.caseNumber||'',
+      studentId:               ticket.studentId||'(blank)',
+      associate:               ticket.caseOwner||'',
+      product:                 ticket.product||'',
+      country:                 ticket.country||'',
+      solvedDate:              ticket.solvedDate||'(blank)',
+      resolution:              cleanText(ticket.resolution)||'',
+      result:                  'Unevaluated',
+      firstValidSessionDate:   '',
+      firstValidSessionPresent:'',
+      firstValidCancelReason:  '',
+      skippedSessions:         0
+    };
+
+    if(!studentIdRaw){row.result='Missing Student ID';lastOutcomeResults.push(row);return;}
+    if(!solvedDateRaw){row.result='Missing Solved Date';lastOutcomeResults.push(row);return;}
+
+    const sid=studentIdRaw.toLowerCase();
+    const attRecords=attendanceMap[sid];
+
+    // Full datetime for the intervention timestamp
+    const solvedDt=parseDateTime(ticket.solvedDate)||parseDate(ticket.solvedDate);
+    const solvedMs=solvedDt?solvedDt.getTime():null;
+
+    if(!solvedMs){row.result='Missing Solved Date';lastOutcomeResults.push(row);return;}
+    if(!attRecords||!attRecords.length){row.result='No Attendance Record';lastOutcomeResults.push(row);return;}
+
+    // Sessions strictly AFTER the intervention timestamp, sorted ascending
+    const sortedAfter=attRecords
+      .map(r=>({...r,dt:parseAttendanceDate(r.date)}))
+      .filter(r=>r.dt&&r.dt.getTime()>solvedMs)
+      .sort((a,b)=>a.dt.getTime()-b.dt.getTime());
+
+    if(!sortedAfter.length){row.result='No Valid Future Session';lastOutcomeResults.push(row);return;}
+
+    // Walk sessions, skipping internal cancellations
+    let outcome=null,firstValid=null,skipped=0;
+    for(const session of sortedAfter){
+      const cr=cleanText(session.cancelReason).toLowerCase().trim();
+      const isStudentNoshow=cr==='student: noshow';
+      const isInternalCancel=cr!==''&&cr!=='na'&&cr!=='n/a'&&!isStudentNoshow;
+      if(isInternalCancel){skipped++;continue;}
+      outcome=isPresent(session.present);
+      firstValid=session;
+      break;
+    }
+
+    row.skippedSessions=skipped;
+    if(firstValid){
+      row.firstValidSessionDate=firstValid.date||'';
+      row.firstValidSessionPresent=firstValid.present||'';
+      row.firstValidCancelReason=firstValid.cancelReason||'';
+    }
+
+    if(outcome===null){row.result='No Valid Future Session';lastOutcomeResults.push(row);return;}
+
+    evaluated++;
+    if(outcome){reactivated++;row.result='Reactivated';}
+    else{notReactivated++;row.result='Not Reactivated';}
+    lastOutcomeResults.push(row);
+
+    const resRaw=cleanText(ticket.resolution);
+    if(resRaw.toLowerCase().includes('batch')){batchTotal++;if(outcome)batchReactivated++;}
+    const resKey=resRaw||'(Blank)';
+    if(!resByRes[resKey])resByRes[resKey]={total:0,reactivated:0};
+    resByRes[resKey].total++;
+    if(outcome)resByRes[resKey].reactivated++;
+  });
+
+  const reactivationPct=evaluated>0?(reactivated/evaluated*100).toFixed(1):'—';
+  const batchPct=batchTotal>0?(batchReactivated/batchTotal*100).toFixed(1):'—';
+  const reactNum=parseFloat(reactivationPct);
+  document.getElementById('k-reactivation').textContent=reactivationPct+'%';
+  document.getElementById('k-react-pill').textContent=`${fmt(reactivated)} of ${fmt(evaluated)} evaluated`;
+  document.getElementById('k-react-pill').className='kpi-pct '+(reactNum>=50?'good':reactNum>=25?'mid':'low');
+
+  // Every connected ticket lands in exactly ONE of these buckets.
+  // They should always add up to allConnectedTickets.length.
+  const missingStudentId=lastOutcomeResults.filter(r=>r.result==='Missing Student ID').length;
+  const missingSolvedDate=lastOutcomeResults.filter(r=>r.result==='Missing Solved Date').length;
+  const noAttendanceRecord=lastOutcomeResults.filter(r=>r.result==='No Attendance Record').length;
+  const noValidFutureSession=lastOutcomeResults.filter(r=>r.result==='No Valid Future Session').length;
+  const notEvaluatedCount=missingStudentId+missingSolvedDate+noAttendanceRecord+noValidFutureSession;
+
+  const getColor=(pct,goodThresh,badThresh,invert=false)=>{
+    const v=parseFloat(pct);if(isNaN(v))return'var(--muted)';
+    if(!invert)return v>=goodThresh?'var(--green)':v>=badThresh?'var(--yellow)':'var(--red)';
+    return v<=goodThresh?'var(--green)':v<=badThresh?'var(--yellow)':'var(--red)';
+  };
+
+  const resEff=Object.entries(resByRes).filter(([,v])=>v.total>=2).sort((a,b)=>(b[1].reactivated/b[1].total)-(a[1].reactivated/a[1].total));
+
+  el.innerHTML=`
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:14px">
+    <div class="outcome-kpi">
+      <div class="kpi-label">Connected Tickets Evaluated</div>
+      <div class="kpi-value" style="font-size:22px">${fmt(evaluated)}</div>
+      <div class="kpi-sub">of ${fmt(allConnectedTickets.length)} connected · ${fmt(notEvaluatedCount)} not evaluated · see breakdown below</div>
+    </div>
+    <div class="outcome-kpi">
+      <div class="kpi-label">Reactivation Rate</div>
+      <div class="kpi-value" style="font-size:22px;color:${getColor(reactivationPct,50,25)}">${reactivationPct}%</div>
+      <div class="kpi-sub">${fmt(reactivated)} of ${fmt(evaluated)} — attended first class after call</div>
+    </div>
+    <div class="outcome-kpi">
+      <div class="kpi-label">Not Reactivated</div>
+      <div class="kpi-value" style="font-size:22px;color:var(--red)">${fmt(notReactivated)}</div>
+      <div class="kpi-sub">missed first class even after intervention</div>
+    </div>
+    <div class="outcome-kpi">
+      <div class="kpi-label">Batch Changes Made</div>
+      <div class="kpi-value" style="font-size:22px">${fmt(batchTotal)}</div>
+      <div class="kpi-sub" style="color:${getColor(batchPct,50,25)}">${batchPct}% attended first class after batch change</div>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:20px">
+    <div class="outcome-kpi" style="padding:10px 14px">
+      <div class="kpi-label" style="font-size:10px">Missing Student ID</div>
+      <div class="kpi-value" style="font-size:16px;color:var(--muted)">${fmt(missingStudentId)}</div>
+    </div>
+    <div class="outcome-kpi" style="padding:10px 14px">
+      <div class="kpi-label" style="font-size:10px">Missing Solved Date</div>
+      <div class="kpi-value" style="font-size:16px;color:var(--muted)">${fmt(missingSolvedDate)}</div>
+    </div>
+    <div class="outcome-kpi" style="padding:10px 14px">
+      <div class="kpi-label" style="font-size:10px">No Attendance Record</div>
+      <div class="kpi-value" style="font-size:16px;color:var(--muted)">${fmt(noAttendanceRecord)}</div>
+    </div>
+    <div class="outcome-kpi" style="padding:10px 14px">
+      <div class="kpi-label" style="font-size:10px">No Valid Future Session</div>
+      <div class="kpi-value" style="font-size:16px;color:var(--muted)">${fmt(noValidFutureSession)}</div>
+    </div>
+  </div>
+  ${resEff.length>0?`
+  <div class="panel-title" style="margin-bottom:10px">
+    <span class="dot" style="background:var(--teal)"></span>Resolution Effectiveness
+    <span style="font-size:10px;color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0;margin-left:4px">sorted by reactivation rate · min 2 evaluated tickets · first-session basis</span>
+  </div>
+  <div style="overflow-x:auto">
+  <table class="owner-table">
+    <thead><tr>
+      <th>Resolution Provided</th>
+      <th style="text-align:center">Tickets</th>
+      <th style="text-align:center">Reactivated</th>
+      <th style="text-align:center">Reactivation Rate</th>
+      <th style="text-align:left">Effectiveness</th>
+    </tr></thead>
+    <tbody>${resEff.map(([res,d])=>{
+      const pv=(d.reactivated/d.total*100).toFixed(1);
+      const cls=parseFloat(pv)>=50?'good':parseFloat(pv)>=25?'mid':'low';
+      const barW=Math.round(parseFloat(pv));
+      return`<tr>
+        <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${escH(res)}">${escH(res)}</td>
+        <td class="center" style="font-family:'DM Mono',monospace">${fmt(d.total)}</td>
+        <td class="center" style="font-family:'DM Mono',monospace">${fmt(d.reactivated)}</td>
+        <td class="center"><span class="pct-pill ${cls}">${pv}%</span></td>
+        <td><span class="res-eff-bar" style="width:${Math.min(barW,80)}px;background:${parseFloat(pv)>=50?'#22c55e':parseFloat(pv)>=25?'#eab308':'#ef4444'}"></span></td>
+      </tr>`;
+    }).join('')}</tbody>
+  </table></div>`:`<div style="color:var(--muted);font-size:12px;text-align:center;padding:16px">Insufficient matched data to calculate resolution effectiveness</div>`}
+  `;
+}
+
+// ─── Attendance Intelligence ──────────────────────────────────────────────────
+// FIX: Attendance API loaded once on startup; attendanceMap cached in memory.
+// renderAttendanceIntelligence receives the SAME filtered ticket population as
+// Outcome Analysis (data = currentFilteredData) and derives attendance records
+// by matching student IDs — no stale or complete dataset usage.
+
+function formatHour(h){
+  const hh=String(h).padStart(2,'0'),he=String((h+1)%24).padStart(2,'0');
+  return`${hh}:00 – ${he}:00`;
+}
+// FIX #7: Top entry for reasons — blank becomes 'No Reason Stated'
+function topEntry(obj){
+  const e=Object.entries(obj||{}).sort((a,b)=>b[1]-a[1])[0];
+  return e?e[0]:'—';
+}
+function getPeakHourStr(hourCounts){
+  const top=Object.entries(hourCounts||{}).sort((a,b)=>b[1]-a[1])[0];
+  return top?formatHour(parseInt(top[0])):'—';
+}
+function attReactPct(agg){
+  if(!agg.evaluated)return'—';
+  return(agg.reactivated/agg.evaluated*100).toFixed(1)+'%';
+}
+// FIX #4: Repeat % = unique repeat students ÷ unique total students, with count display
+function attRepeatHtml(agg,repClass){
+  if(!agg.totalStudents.size)return'—';
+  const pct=(agg.repeatStudents.size/agg.totalStudents.size*100).toFixed(1);
+  const cls=repClass||(parseFloat(pct)>=30?'low':parseFloat(pct)>=15?'mid':'good');
+  return`<span class="pct-pill ${cls}">${pct}%</span><span class="rep-count">${agg.repeatStudents.size} of ${agg.totalStudents.size}</span>`;
+}
+
+function renderAttendanceIntelligence(data){
+  if(!attendanceLoaded||!attendanceData.length){
+    document.getElementById('att-intel-section').style.display='none';
+    return;
+  }
+  document.getElementById('att-intel-section').style.display='';
+
+  // ── Step 1: Filtered student IDs (from CURRENT FILTER — same population as Outcome) ──
+  // FIX #2 & #5: All attendance metrics derive from this filtered set only.
+  const sids=new Set(
+    data.filter(r=>r.studentId&&r.studentId.trim())
+        .map(r=>r.studentId.trim().toLowerCase())
+  );
+
+  // ── Step 2: Per-student attendance stats — computed once from cached attendanceMap ──
+  const studentAttStats={};
+  sids.forEach(sid=>{
+    const records=attendanceMap[sid]||[];
+    const hourCounts={};let totalMissed=0;
+    records.forEach(r=>{
+      if(!isPresent(r.present)){
+        totalMissed++;
+        const dt=parseAttendanceDate(r.date);
+        if(dt){const h=dt.getHours();hourCounts[h]=(hourCounts[h]||0)+1;}
+      }
+    });
+    const topHourE=Object.entries(hourCounts).sort((a,b)=>b[1]-a[1])[0];
+    studentAttStats[sid]={totalMissed,hourCounts,peakHour:topHourE?parseInt(topHourE[0]):null};
+  });
+
+  // ── Step 3: Student ticket count (for repeat detection within current filter) ──
+  const studentTicketCount={};
+  data.forEach(r=>{
+    const sid=cleanText(r.studentId).toLowerCase();
+    if(sid)studentTicketCount[sid]=(studentTicketCount[sid]||0)+1;
+  });
+
+  // ── Step 4: Outcome lookup (reactivation from lastOutcomeResults) ──
+  const outcomeByCase={};
+  (lastOutcomeResults||[]).forEach(r=>{outcomeByCase[r.caseNumber]=r.result;});
+
+  // ── Step 5: Aggregation factory ──
+  const mkAgg=()=>({
+    tickets:0,evaluated:0,reactivated:0,
+    totalStudents:new Set(),repeatStudents:new Set(),
+    reasons:{},resolutions:{},grades:{},products:{},countries:{},
+    hourCounts:{},totalMissedSessions:0
+  });
+
+  // Item 7: byRegion replaces byCountry — group by business region
+  const byRegion={},byGrade={},byProduct={};
+  const byHour={};// Time Intelligence: keyed by hour
+
+  // ── Step 6: Single-pass aggregation over filtered tickets ──
+  data.forEach(ticket=>{
+    const country=cleanText(ticket.country)||'(Unknown)';
+    const region=getRegion(country.toUpperCase());// Item 7: region-level aggregation
+    const grade=cleanText(ticket.studentGrade)||'(Unknown)';
+    const product=cleanText(ticket.product)||'(Unknown)';
+    // FIX #6: resolution only from connected calls, exclude blank & RNR
+    const resolution=cleanText(ticket.resolution);
+    const isConnected=isConnectedExact(ticket.reasonJ);
+    const sid=cleanText(ticket.studentId).toLowerCase();
+
+    const outcome=outcomeByCase[ticket.caseNumber];
+    const isReactivated=outcome==='Reactivated';
+    const isEvaluated=outcome==='Reactivated'||outcome==='Not Reactivated';
+    const isRepeat=(studentTicketCount[sid]||0)>=2;
+    const attStat=sid?(studentAttStats[sid]||{totalMissed:0,hourCounts:{},peakHour:null}):{totalMissed:0,hourCounts:{},peakHour:null};
+
+    const upd=(agg,extra)=>{
+      agg.tickets++;
+      if(sid)agg.totalStudents.add(sid);
+      if(isEvaluated)agg.evaluated++;
+      if(isReactivated)agg.reactivated++;
+      if(isRepeat&&sid)agg.repeatStudents.add(sid);
+      // Item 9: Top Reason from connected calls only (same dataset as Top Resolution)
+      // Item 10: blank reason on connected call → 'No Reason Stated'
+      if(isConnected){
+        const connReason=cleanText(ticket.reasonJ)||'No Reason Stated';
+        agg.reasons[connReason]=(agg.reasons[connReason]||0)+1;
+      }
+      // FIX #6: only count resolutions from connected calls; exclude blank & RNR
+      if(isConnected&&resolution&&resolution.toLowerCase()!=='rnr'){
+        agg.resolutions[resolution]=(agg.resolutions[resolution]||0)+1;
+      }
+      if(extra.grade)agg.grades[extra.grade]=(agg.grades[extra.grade]||0)+1;
+      if(extra.product)agg.products[extra.product]=(agg.products[extra.product]||0)+1;
+      if(extra.country)agg.countries[extra.country]=(agg.countries[extra.country]||0)+1;
+      Object.entries(attStat.hourCounts).forEach(([h,c])=>{
+        agg.hourCounts[h]=(agg.hourCounts[h]||0)+c;
+      });
+    };
+
+    // Item 7: aggregate by region (track country within region for drill-down)
+    if(!byRegion[region])byRegion[region]=mkAgg();
+    upd(byRegion[region],{grade,product,country});
+
+    if(!byGrade[grade])byGrade[grade]=mkAgg();
+    upd(byGrade[grade],{country,product});
+
+    if(!byProduct[product])byProduct[product]=mkAgg();
+    upd(byProduct[product],{grade,country});
+
+    // Time Intelligence: bucket by student's peak missed hour
+    if(attStat.peakHour!==null){
+      const h=attStat.peakHour;
+      if(!byHour[h])byHour[h]={missed:0,tickets:0,evaluated:0,reactivated:0,repeatStudents:0,students:new Set()};
+      byHour[h].tickets++;
+      if(sid)byHour[h].students.add(sid);
+      if(isEvaluated)byHour[h].evaluated++;
+      if(isReactivated)byHour[h].reactivated++;
+      if(isRepeat)byHour[h].repeatStudents++;
+    }
+  });
+
+  // ── Step 7: Raw missed-session counts — filtered to current ticket population only ──
+  attendanceData.filter(r=>sids.has(r.leadId.toLowerCase())).forEach(r=>{
+    if(!isPresent(r.present)){
+      const dt=parseAttendanceDate(r.date);
+      if(dt){
+        const h=dt.getHours();
+        if(!byHour[h])byHour[h]={missed:0,tickets:0,evaluated:0,reactivated:0,repeatStudents:0,students:new Set()};
+        byHour[h].missed++;
+      }
+    }
+  });
+
+  // ── Step 8: Correct missed-session totals per dimension (unique student basis) ──
+  [byRegion,byGrade,byProduct].forEach(dim=>{
+    Object.values(dim).forEach(agg=>{
+      agg.totalMissedSessions=0;
+      agg.totalStudents.forEach(sid=>{
+        agg.totalMissedSessions+=(studentAttStats[sid]?.totalMissed||0);
+      });
+    });
+  });
+
+  // Cache for drill-down and exports
+  lastAttIntelData={byRegion,byGrade,byProduct,byHour};
+
+  // ── Step 9: Render ──
+  renderAttSummaryCards(data,byRegion,byGrade,byHour);
+  renderAttIntelTableFn(byRegion);
+  renderGradeIntelTableFn(byGrade,data.length);
+  renderTimeIntelTableFn(byHour);
+  renderCountryTimeIntelTableFn(byRegion);
+  renderProductIntelTableFn(byProduct);
+}
+
+function renderAttSummaryCards(data,byRegion,byGrade,byHour){
+  // Card 1: Most Affected Grade (Col R)
+  const topGradeE=Object.entries(byGrade).sort((a,b)=>b[1].tickets-a[1].tickets)[0];
+  document.getElementById('att-card-grade').textContent=topGradeE?topGradeE[0]:'—';
+  document.getElementById('att-card-grade-sub').textContent=topGradeE?`${fmt(topGradeE[1].tickets)} tickets`:'';
+
+  // Card 2: Peak Missed Class Time — from filtered attendance only
+  const topHourE=Object.entries(byHour).sort((a,b)=>b[1].missed-a[1].missed)[0];
+  document.getElementById('att-card-time').textContent=topHourE?formatHour(parseInt(topHourE[0])):'—';
+  document.getElementById('att-card-time-sub').textContent=topHourE?`${fmt(topHourE[1].missed)} missed sessions`:'';
+
+  // Card 3: Highest Absenteeism Region (Item 7)
+  const topRE=Object.entries(byRegion).sort((a,b)=>b[1].tickets-a[1].tickets)[0];
+  document.getElementById('att-card-country').textContent=topRE?topRE[0]:'—';
+  document.getElementById('att-card-country-sub').textContent=topRE?`${fmt(topRE[1].tickets)} tickets`:'';
+
+  // Card 4: Highest Repeat Region — FIX #4: show both % and count
+  const stCount={};
+  data.forEach(r=>{const sid=cleanText(r.studentId).toLowerCase();if(sid)stCount[sid]=(stCount[sid]||0)+1;});
+  const regSt={},regRep={};
+  data.forEach(r=>{
+    const reg=getRegion(cleanText(r.country).toUpperCase());
+    const sid=cleanText(r.studentId).toLowerCase();
+    if(!sid)return;
+    if(!regSt[reg])regSt[reg]=new Set();
+    regSt[reg].add(sid);
+    if((stCount[sid]||0)>=2){if(!regRep[reg])regRep[reg]=new Set();regRep[reg].add(sid);}
+  });
+  const topReg=REGION_ORDER.map(reg=>{
+    const total=regSt[reg]?.size||0,repeats=regRep[reg]?.size||0;
+    return{reg,pct:total>0?(repeats/total*100):0,repeats,total};
+  }).filter(r=>r.total>0).sort((a,b)=>b.pct-a.pct)[0];
+  document.getElementById('att-card-region').textContent=topReg?topReg.reg:'—';
+  // FIX #4: show % + count
+  document.getElementById('att-card-region-sub').textContent=topReg?`${topReg.pct.toFixed(1)}% · ${topReg.repeats} of ${topReg.total} students`:'';
+}
+
+function renderAttIntelTableFn(byRegion){
+  const tbody=document.getElementById('att-intel-body');
+  // Item 7: respect region filter dropdown
+  const regionFilter=(document.getElementById('att-region-filter')?.value)||'all';
+  let entries=Object.entries(byRegion).sort((a,b)=>b[1].totalMissedSessions-a[1].totalMissedSessions);
+  if(regionFilter!=='all')entries=entries.filter(([r])=>r===regionFilter);
+  if(!entries.length){tbody.innerHTML=`<tr><td colspan="8" style="color:var(--muted);text-align:center;padding:16px">No data</td></tr>`;return;}
+  tbody.innerHTML=entries.map(([region,d])=>{
+    const topGrade=topEntry(d.grades);
+    const peakTime=getPeakHourStr(d.hourCounts);
+    // Item 9: Top Reason & Top Resolution — both from connected calls only
+    const topReason=topEntry(d.reasons)||'—';
+    const topRes=topEntry(d.resolutions)||'—';
+    const rPct=attReactPct(d);
+    const rClass=parseFloat(rPct)>=50?'good':parseFloat(rPct)>=25?'mid':'low';
+    const repHtml=attRepeatHtml(d);
+    const safeR=escH(region);
+    return`<tr style="cursor:pointer" onclick="openDrillDown('region','${safeR}')">
+      <td style="font-weight:500">${safeR}</td>
+      <td class="center" style="font-family:'DM Mono',monospace">${fmt(d.totalMissedSessions)}</td>
+      <td class="center">${rPct!=='—'?`<span class="pct-pill ${rClass}">${rPct}</span>`:rPct}</td>
+      <td class="center">${repHtml}</td>
+      <td style="font-size:11px">${escH(topGrade)}</td>
+      <td class="center" style="white-space:nowrap;font-size:11px">${escH(peakTime)}</td>
+      <td style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px;color:var(--muted)" title="${escH(topReason)}">${escH(topReason)}</td>
+      <td style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px;color:var(--muted)" title="${escH(topRes)}">${escH(topRes)}</td>
+    </tr>`;
+  }).join('');
+}
+
+function renderGradeIntelTableFn(byGrade,totalTickets){
+  const tbody=document.getElementById('grade-intel-body');
+  const entries=Object.entries(byGrade).sort((a,b)=>b[1].tickets-a[1].tickets);
+  if(!entries.length){tbody.innerHTML=`<tr><td colspan="7" style="color:var(--muted);text-align:center;padding:16px">No data</td></tr>`;return;}
+  tbody.innerHTML=entries.map(([grade,d])=>{
+    const pctOfTotal=totalTickets>0?(d.tickets/totalTickets*100).toFixed(1)+'%':'—';
+    const rPct=attReactPct(d);
+    const rClass=parseFloat(rPct)>=50?'good':parseFloat(rPct)>=25?'mid':'low';
+    const repHtml=attRepeatHtml(d);
+    const topReason=topEntry(d.reasons);
+    const peakTime=getPeakHourStr(d.hourCounts);
+    const safeG=escH(grade);
+    return`<tr style="cursor:pointer" onclick="openDrillDown('grade','${safeG}')">
+      <td style="font-weight:500">${safeG}</td>
+      <td class="center" style="font-family:'DM Mono',monospace">${fmt(d.tickets)}</td>
+      <td class="center">${pctOfTotal}</td>
+      <td class="center">${rPct!=='—'?`<span class="pct-pill ${rClass}">${rPct}</span>`:rPct}</td>
+      <td class="center">${repHtml}</td>
+      <td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px;color:var(--muted)" title="${escH(topReason)}">${escH(topReason)}</td>
+      <td class="center" style="white-space:nowrap;font-size:11px">${escH(peakTime)}</td>
+    </tr>`;
+  }).join('');
+}
+
+function renderTimeIntelTableFn(byHour){
+  const tbody=document.getElementById('time-intel-body');
+  const entries=Object.entries(byHour).filter(([,d])=>d.missed>0).sort((a,b)=>b[1].missed-a[1].missed);
+  if(!entries.length){tbody.innerHTML=`<tr><td colspan="4" style="color:var(--muted);text-align:center;padding:16px">No attendance data for filtered tickets</td></tr>`;return;}
+  tbody.innerHTML=entries.map(([h,d])=>{
+    const rPct=d.evaluated>0?(d.reactivated/d.evaluated*100).toFixed(1)+'%':'—';
+    const repPct=d.students&&d.students.size>0?(d.repeatStudents/d.students.size*100).toFixed(1):'';
+    const repHtml=repPct?`<span class="pct-pill ${parseFloat(repPct)>=30?'low':parseFloat(repPct)>=15?'mid':'good'}">${repPct}%</span><span class="rep-count">${d.repeatStudents} of ${d.students.size}</span>`:'—';
+    const rClass=parseFloat(rPct)>=50?'good':parseFloat(rPct)>=25?'mid':'low';
+    return`<tr>
+      <td style="font-weight:500;white-space:nowrap;font-family:'DM Mono',monospace;font-size:11px">${formatHour(parseInt(h))}</td>
+      <td class="center" style="font-family:'DM Mono',monospace">${fmt(d.missed)}</td>
+      <td class="center">${rPct!=='—'?`<span class="pct-pill ${rClass}">${rPct}</span>`:rPct}</td>
+      <td class="center">${repHtml}</td>
+    </tr>`;
+  }).join('');
+}
+
+function renderCountryTimeIntelTableFn(byRegion){
+  // Item 7: now shows regional time intelligence
+  const tbody=document.getElementById('country-time-intel-body');
+  const entries=Object.entries(byRegion).sort((a,b)=>b[1].totalMissedSessions-a[1].totalMissedSessions);
+  if(!entries.length){tbody.innerHTML=`<tr><td colspan="4" style="color:var(--muted);text-align:center;padding:16px">No data</td></tr>`;return;}
+  tbody.innerHTML=entries.map(([region,d])=>{
+    const peakTime=getPeakHourStr(d.hourCounts);
+    const rPct=attReactPct(d);
+    const rClass=parseFloat(rPct)>=50?'good':parseFloat(rPct)>=25?'mid':'low';
+    return`<tr>
+      <td style="font-weight:500">${escH(region)}</td>
+      <td class="center" style="white-space:nowrap;font-size:11px">${escH(peakTime)}</td>
+      <td class="center" style="font-family:'DM Mono',monospace">${fmt(d.totalMissedSessions)}</td>
+      <td class="center">${rPct!=='—'?`<span class="pct-pill ${rClass}">${rPct}</span>`:rPct}</td>
+    </tr>`;
+  }).join('');
+}
+
+function renderProductIntelTableFn(byProduct){
+  const tbody=document.getElementById('product-intel-body');
+  const entries=Object.entries(byProduct).sort((a,b)=>b[1].tickets-a[1].tickets);
+  if(!entries.length){tbody.innerHTML=`<tr><td colspan="6" style="color:var(--muted);text-align:center;padding:16px">No data</td></tr>`;return;}
+  tbody.innerHTML=entries.map(([product,d])=>{
+    const rPct=attReactPct(d);
+    const rClass=parseFloat(rPct)>=50?'good':parseFloat(rPct)>=25?'mid':'low';
+    const repHtml=attRepeatHtml(d);
+    const topGrade=topEntry(d.grades);
+    const peakTime=getPeakHourStr(d.hourCounts);
+    const safeP=escH(product);
+    return`<tr style="cursor:pointer" onclick="openDrillDown('product','${safeP}')">
+      <td style="font-weight:500">${safeP}</td>
+      <td class="center" style="font-family:'DM Mono',monospace">${fmt(d.tickets)}</td>
+      <td class="center">${rPct!=='—'?`<span class="pct-pill ${rClass}">${rPct}</span>`:rPct}</td>
+      <td class="center">${repHtml}</td>
+      <td style="font-size:11px">${escH(topGrade)}</td>
+      <td class="center" style="white-space:nowrap;font-size:11px">${escH(peakTime)}</td>
+    </tr>`;
+  }).join('');
+}
+
+// ─── Drill-down Modal ─────────────────────────────────────────────────────────
+function openDrillDown(type,key){
+  if(!lastAttIntelData)return;
+  let agg=null,title='';
+  if(type==='region'){agg=lastAttIntelData.byRegion[key];title=`🌍 ${key} — Regional Detail`;}
+  else if(type==='grade'){agg=lastAttIntelData.byGrade[key];title=`🎓 Grade ${key} — Detail`;}
+  else if(type==='product'){agg=lastAttIntelData.byProduct[key];title=`📦 ${key} — Product Detail`;}
+  if(!agg)return;
+
+  const topReasons=Object.entries(agg.reasons||{}).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  const topResolutions=Object.entries(agg.resolutions||{}).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  const topGrades=type!=='grade'?Object.entries(agg.grades||{}).sort((a,b)=>b[1]-a[1]).slice(0,5):[];
+  const topProducts=type!=='product'?Object.entries(agg.products||{}).sort((a,b)=>b[1]-a[1]).slice(0,5):[];
+  // Item 7: show countries within a region in the drill-down
+  const topCountries=Object.entries(agg.countries||{}).sort((a,b)=>b[1]-a[1]).slice(0,8);
+  const peakTime=getPeakHourStr(agg.hourCounts);
+  const rPct=attReactPct(agg);
+  const rClass=parseFloat(rPct)>=50?'good':parseFloat(rPct)>=25?'mid':'low';
+  // FIX #4: show count in drill-down too
+  const repPct=agg.totalStudents.size>0?(agg.repeatStudents.size/agg.totalStudents.size*100).toFixed(1):'';
+  const repClass=parseFloat(repPct)>=30?'low':parseFloat(repPct)>=15?'mid':'good';
+  const repDisplay=repPct?`${repPct}% <span class="rep-count" style="display:inline">(${agg.repeatStudents.size} of ${agg.totalStudents.size})</span>`:'—';
+
+  let html=`<div style="font-size:16px;font-weight:600;color:var(--white);margin-bottom:16px">${escH(title)}</div>`;
+  html+=`<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px;margin-bottom:8px">
+    <div class="outcome-kpi"><div class="kpi-label">Tickets</div><div class="kpi-value" style="font-size:20px">${fmt(agg.tickets)}</div></div>
+    <div class="outcome-kpi"><div class="kpi-label">Unique Students</div><div class="kpi-value" style="font-size:20px">${fmt(agg.totalStudents.size)}</div></div>
+    <div class="outcome-kpi"><div class="kpi-label">Peak Time</div><div class="kpi-value" style="font-size:12px">${escH(peakTime)}</div></div>
+    <div class="outcome-kpi"><div class="kpi-label">Reactivation %</div><div class="kpi-value" style="font-size:18px"><span class="pct-pill ${rClass}">${rPct}</span></div></div>
+    <div class="outcome-kpi"><div class="kpi-label">Repeat %</div><div class="kpi-value" style="font-size:16px"><span class="pct-pill ${repClass}">${repPct?repPct+'%':'—'}</span>${repPct?`<span class="rep-count" style="display:inline-block;margin-top:2px">${agg.repeatStudents.size} of ${agg.totalStudents.size}</span>`:''}</div></div>
+    <div class="outcome-kpi"><div class="kpi-label">Missed Sessions</div><div class="kpi-value" style="font-size:20px">${fmt(agg.totalMissedSessions)}</div></div>
+  </div>`;
+
+  if(topReasons.length){
+    html+=`<div class="drill-section-title">Top Reasons</div><div class="drill-chips">`;
+    topReasons.forEach(([r,c])=>{html+=`<span class="drill-chip">${escH(r)} <strong style="color:var(--accent)">(${c})</strong></span>`;});
+    html+=`</div>`;
+  }
+  if(topResolutions.length){
+    html+=`<div class="drill-section-title">Top Resolutions (Connected Calls)</div><div class="drill-chips">`;
+    topResolutions.forEach(([r,c])=>{html+=`<span class="drill-chip">${escH(r)} <strong style="color:var(--teal)">(${c})</strong></span>`;});
+    html+=`</div>`;
+  }
+  if(topGrades.length){
+    html+=`<div class="drill-section-title">Top Grades</div><div class="drill-chips">`;
+    topGrades.forEach(([g,c])=>{html+=`<span class="drill-chip">${escH(g)} (${c})</span>`;});
+    html+=`</div>`;
+  }
+  if(topProducts.length){
+    html+=`<div class="drill-section-title">Top Products</div><div class="drill-chips">`;
+    topProducts.forEach(([p,c])=>{html+=`<span class="drill-chip">${escH(p)} (${c})</span>`;});
+    html+=`</div>`;
+  }
+  if(topCountries.length){
+    html+=`<div class="drill-section-title">Top Countries</div><div class="drill-chips">`;
+    topCountries.forEach(([c,cnt])=>{html+=`<span class="drill-chip">${escH(c)} (${cnt})</span>`;});
+    html+=`</div>`;
+  }
+
+  document.getElementById('drill-modal-content').innerHTML=html;
+  document.getElementById('drill-modal-overlay').classList.add('open');
+}
+function closeDrillModal(){
+  document.getElementById('drill-modal-overlay').classList.remove('open');
+}
+
+// ─── Export Functions for Attendance Intelligence ─────────────────────────────
+function exportAttIntelTable(){
+  if(!lastAttIntelData){alert('Attendance Intelligence not yet loaded.');return;}
+  const esc=v=>`"${String(v??'').replace(/"/g,'""')}"`;
+  // Item 7: export byRegion; respect region filter
+  const regionFilter=(document.getElementById('att-region-filter')?.value)||'all';
+  const hdr=['Region','Total Missed Sessions','Reactivation %','Repeat %','Repeat Students','Total Students','Top Grade','Peak Batch Time','Top Reason (Connected)','Top Resolution (Connected)'];
+  let entries=Object.entries(lastAttIntelData.byRegion).sort((a,b)=>b[1].totalMissedSessions-a[1].totalMissedSessions);
+  if(regionFilter!=='all')entries=entries.filter(([r])=>r===regionFilter);
+  const rows=entries.map(([region,d])=>[
+    region,d.totalMissedSessions,attReactPct(d),
+    d.totalStudents.size>0?(d.repeatStudents.size/d.totalStudents.size*100).toFixed(1)+'%':'—',
+    d.repeatStudents.size,d.totalStudents.size,
+    topEntry(d.grades),getPeakHourStr(d.hourCounts),
+    topEntry(d.reasons),topEntry(d.resolutions)
+  ]);
+  downloadCSV([hdr.join(','),...rows.map(r=>r.map(esc).join(','))].join('\n'),`regional-intel-${new Date().toISOString().slice(0,10)}.csv`);
+}
+function exportGradeIntelTable(){
+  if(!lastAttIntelData){alert('Attendance Intelligence not yet loaded.');return;}
+  const esc=v=>`"${String(v??'').replace(/"/g,'""')}"`;
+  const total=Object.values(lastAttIntelData.byGrade).reduce((s,d)=>s+d.tickets,0);
+  const hdr=['Grade','Total Tickets','% of Total','Reactivation %','Repeat %','Repeat Students','Total Students','Top Reason','Peak Time'];
+  const rows=Object.entries(lastAttIntelData.byGrade).sort((a,b)=>b[1].tickets-a[1].tickets).map(([g,d])=>[
+    g,d.tickets,total>0?(d.tickets/total*100).toFixed(1)+'%':'—',
+    attReactPct(d),
+    d.totalStudents.size>0?(d.repeatStudents.size/d.totalStudents.size*100).toFixed(1)+'%':'—',
+    d.repeatStudents.size,d.totalStudents.size,
+    topEntry(d.reasons),getPeakHourStr(d.hourCounts)
+  ]);
+  downloadCSV([hdr.join(','),...rows.map(r=>r.map(esc).join(','))].join('\n'),`grade-intel-${new Date().toISOString().slice(0,10)}.csv`);
+}
+function exportTimeIntelTable(){
+  if(!lastAttIntelData){alert('Attendance Intelligence not yet loaded.');return;}
+  const esc=v=>`"${String(v??'').replace(/"/g,'""')}"`;
+  const hdr=['Time Slot','Missed Classes','Reactivation %','Repeat %','Repeat Students','Total Students in Slot'];
+  const rows=Object.entries(lastAttIntelData.byHour).filter(([,d])=>d.missed>0).sort((a,b)=>b[1].missed-a[1].missed).map(([h,d])=>[
+    formatHour(parseInt(h)),d.missed,
+    d.evaluated>0?(d.reactivated/d.evaluated*100).toFixed(1)+'%':'—',
+    d.students&&d.students.size>0?(d.repeatStudents/d.students.size*100).toFixed(1)+'%':'—',
+    d.repeatStudents,d.students?d.students.size:0
+  ]);
+  downloadCSV([hdr.join(','),...rows.map(r=>r.map(esc).join(','))].join('\n'),`time-intel-${new Date().toISOString().slice(0,10)}.csv`);
+}
+function exportCountryTimeIntelTable(){
+  if(!lastAttIntelData){alert('Attendance Intelligence not yet loaded.');return;}
+  const esc=v=>`"${String(v??'').replace(/"/g,'""')}"`;
+  // Item 7: now regional time intelligence
+  const hdr=['Region','Peak Time','Missed Sessions','Reactivation %'];
+  const rows=Object.entries(lastAttIntelData.byRegion).sort((a,b)=>b[1].totalMissedSessions-a[1].totalMissedSessions).map(([r,d])=>[
+    r,getPeakHourStr(d.hourCounts),d.totalMissedSessions,attReactPct(d)
+  ]);
+  downloadCSV([hdr.join(','),...rows.map(r=>r.map(esc).join(','))].join('\n'),`regional-time-intel-${new Date().toISOString().slice(0,10)}.csv`);
+}
+function exportProductIntelTable(){
+  if(!lastAttIntelData){alert('Attendance Intelligence not yet loaded.');return;}
+  const esc=v=>`"${String(v??'').replace(/"/g,'""')}"`;
+  const hdr=['Product','Tickets','Reactivation %','Repeat %','Repeat Students','Total Students','Top Grade','Peak Time'];
+  const rows=Object.entries(lastAttIntelData.byProduct).sort((a,b)=>b[1].tickets-a[1].tickets).map(([p,d])=>[
+    p,d.tickets,attReactPct(d),
+    d.totalStudents.size>0?(d.repeatStudents.size/d.totalStudents.size*100).toFixed(1)+'%':'—',
+    d.repeatStudents.size,d.totalStudents.size,
+    topEntry(d.grades),getPeakHourStr(d.hourCounts)
+  ]);
+  downloadCSV([hdr.join(','),...rows.map(r=>r.map(esc).join(','))].join('\n'),`product-intel-${new Date().toISOString().slice(0,10)}.csv`);
+}
+
+// ─── Export Functions ─────────────────────────────────────────────────────────
+function downloadCSV(csv,filename){
+  const blob=new Blob([csv],{type:'text/csv;charset=utf-8'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=filename;
+  document.body.appendChild(a);a.click();URL.revokeObjectURL(a.href);a.remove();
+}
+function exportCSV(){
+  const headers=['owner','caseNumber','studentId','dateOpened','product','country','solvedDate','solvedBy','reasonJ','resolution','renewal','abs60','lastModified','assignedDate','geo','dialed','connected'];
+  const csvEsc=v=>`"${String(v??'').replace(/"/g,'""')}"`;
+  const rows=currentFilteredData.map(r=>[r.caseOwner,r.caseNumber,r.studentId,r.dateOpened,r.product,r.country,r.solvedDate,r.solvedBy,r.reasonJ,r.resolution,r.renewal,r.abs60,r.lastModified,r.assignedDate,getGeo(r.country),isDialed(r.reasonJ)?'1':'0',isConnectedExact(r.reasonJ)?'1':'0']);
+  downloadCSV([headers.join(','),...rows.map(row=>row.map(csvEsc).join(','))].join('\n'),`one-for-all-absenteeism-${new Date().toISOString().slice(0,10)}.csv`);
+}
+function exportTicketBreakdown(){
+  const counts={connected:0,system:0,rnr:0,trainer:0,noreason:0,blank:0,refund:0,other:0};
+  currentFilteredData.forEach(r=>{if(String(r.solvedBy).trim().toLowerCase()==='system')counts.system++;counts[getTicketBreakdownType(r.reasonJ)]++;});
+  const grand=Object.values(counts).reduce((s,v)=>s+v,0);
+  const rows=[['Category','Count'],['Connected to parent',''+counts.connected],['System Auto Closed',''+counts.system],['RNR — not connected',''+counts.rnr],['Trainer side cancellation',''+counts.trainer],['Reason not captured',''+counts.noreason],['Blank / not actioned',''+counts.blank],['Refund Related Issues',''+counts.refund],['Other',''+counts.other],['Grand Total',''+grand]];
+  const esc=v=>`"${String(v??'').replace(/"/g,'""')}"`;
+  downloadCSV(rows.map(r=>r.map(esc).join(',')).join('\n'),`ticket-breakdown-${new Date().toISOString().slice(0,10)}.csv`);
+}
+function exportResolution(){
+  const counts={};
+  currentFilteredData.forEach(r=>{const k=cleanText(r.resolution)||'(Blank/Not Actioned)';counts[k]=(counts[k]||0)+1;});
+  const sorted=Object.entries(counts).sort((a,b)=>b[1]-a[1]);
+  const grand=sorted.reduce((s,[,v])=>s+v,0);
+  const rows=[['Resolution','Count'],...sorted.map(([k,v])=>[k,''+v]),['Grand Total',''+grand]];
+  const esc=v=>`"${String(v??'').replace(/"/g,'""')}"`;
+  downloadCSV(rows.map(r=>r.map(esc).join(',')).join('\n'),`resolution-breakdown-${new Date().toISOString().slice(0,10)}.csv`);
+}
+
+// ─── Outcome Evaluation Export ────────────────────────────────────────────────
+// Exports EVERY connected ticket: Reactivated, Not Reactivated, excluded pre-filter,
+// no attendance, no session after call — complete reconciliation of the KPI gap.
+function exportOutcomeEvaluation(){
+  if(!lastOutcomeResults||!lastOutcomeResults.length){
+    alert('No evaluation data yet. Ensure attendance data has loaded and the Outcome panel is visible.');
+    return;
+  }
+  const esc=v=>`"${String(v??'').replace(/"/g,'""')}"`;
+  const headers=['Case Number','Student ID','Associate','Product','Country','Solved Date','Resolution','Result','First Valid Session Date','Is Present','Cancellation Reason','Skipped Sessions'];
+  const rows=lastOutcomeResults.map(r=>[
+    r.caseNumber,r.studentId,r.associate,r.product,r.country,
+    r.solvedDate,r.resolution,r.result,
+    r.firstValidSessionDate,r.firstValidSessionPresent,r.firstValidCancelReason,
+    r.skippedSessions
+  ]);
+  downloadCSV([headers.join(','),...rows.map(row=>row.map(esc).join(','))].join('\n'),
+    `outcome-evaluation-${new Date().toISOString().slice(0,10)}.csv`);
+}
+
+// ─── Init ─────────────────────────────────────────────────────────────────────
+document.getElementById('last-updated').textContent='Updated: '+new Date().toLocaleString('en-IN',{dateStyle:'medium',timeStyle:'short'});
+document.getElementById('footer-date').textContent=new Date().toLocaleDateString('en-IN',{weekday:'short',year:'numeric',month:'short',day:'numeric'});
+document.getElementById('dp-date').value=new Date().toISOString().slice(0,10);
+
+loadSheetData();
+setInterval(()=>loadSheetData(true),AUTO_REFRESH_MS);
+</script>
+</body>
+</html>
